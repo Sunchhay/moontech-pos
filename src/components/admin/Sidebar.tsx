@@ -1,12 +1,17 @@
 import SideBarLink from './SideBarLink';
-import { MdAnalytics, MdAttachMoney, MdDashboard, MdHelpCenter, MdLogout, MdOutlineSettings, MdPeople, MdShoppingBag, MdSupervisedUserCircle, MdWork } from 'react-icons/md';
-import { FaUser } from 'react-icons/fa';
-import { AppImages } from '../../lib/images';
+import { MdAnalytics, MdDashboard, MdHelpCenter, MdLogout, MdOutlineCategory, MdOutlineSettings, MdPeople, MdShoppingBag, MdSupervisedUserCircle, MdWork } from 'react-icons/md';
+import { FaClipboardList, FaUser } from 'react-icons/fa';
+import { AppImages } from '../../utils/lib/images';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import { RouteName } from '../../lib/routeName';
-import useAuth from '../../hook/useAuth';
+import { RouteName } from '../../utils/lib/routeName';
+import useAuth from '../../utils/hook/useAuth';
 import SideBarLinkDropDown from './SideBarLinkDropDown';
+import { TbBrandEnvato } from "react-icons/tb";
+import { GiResize } from "react-icons/gi";
+import { IoColorPaletteOutline } from 'react-icons/io5';
+import { HiColorSwatch } from 'react-icons/hi';
+import { IoIosPricetags } from 'react-icons/io';
 
 const menuItems = [
   {
@@ -14,35 +19,55 @@ const menuItems = [
     list: [
       {
         title: "Dashboard",
-        path: "/admin/dashboard",
+        path: RouteName.Dashboard,
         icon: <MdDashboard />,
       },
       {
-        title: "Products",
-        path: "/admin/products",
-        icon: <MdShoppingBag />,
+        title: "Variations",
+        path: "variations",
+        icon: <HiColorSwatch />,
         list: [
           {
             title: "Brands",
-            path: "/admin/users",
-            icon: <MdSupervisedUserCircle />,
+            path: RouteName.Brands,
+            icon: <TbBrandEnvato />,
           },
           {
             title: "Categories",
-            path: "/admin/users",
-            icon: <MdSupervisedUserCircle />,
+            path: RouteName.Categories,
+            icon: <MdOutlineCategory />,
           },
           {
-            title: "Size",
-            path: "/admin/users",
-            icon: <MdSupervisedUserCircle />,
+            title: "Sizes",
+            path: RouteName.Sizes,
+            icon: <GiResize />,
           },
           {
-            title: "Color",
-            path: "/admin/users",
-            icon: <MdSupervisedUserCircle />,
+            title: "Colors",
+            path: RouteName.Colors,
+            icon: <IoColorPaletteOutline />,
           },
         ]
+      },
+      {
+        title: "Products",
+        path: RouteName.Products,
+        icon: <MdShoppingBag />,
+      },
+      {
+        title: "Customer",
+        path: RouteName.Customers,
+        icon: <MdSupervisedUserCircle />,
+      },
+      {
+        title: "Reservation",
+        path: RouteName.Reservation,
+        icon: <FaClipboardList />,
+      },
+      {
+        title: "POS Sales",
+        path: RouteName.Sales,
+        icon: <IoIosPricetags />
       },
     ]
   },
@@ -51,17 +76,17 @@ const menuItems = [
     list: [
       {
         title: "Revenue",
-        path: "/admin/revenue",
+        path: RouteName.Revenue,
         icon: <MdWork />,
       },
       {
         title: "Reports",
-        path: "/admin/reports",
+        path: RouteName.Reports,
         icon: <MdAnalytics />,
       },
       {
         title: "Teams",
-        path: "/admin/teams",
+        path: RouteName.Teams,
         icon: <MdPeople />,
       },
     ],
@@ -71,17 +96,17 @@ const menuItems = [
     list: [
       {
         title: "Profile",
-        path: "/admin/profile",
+        path: RouteName.Profile,
         icon: <FaUser size={14} />,
       },
       {
         title: "Settings",
-        path: "/admin/settings",
+        path: RouteName.Settings,
         icon: <MdOutlineSettings />,
       },
       {
         title: "Help",
-        path: "/admin/help",
+        path: RouteName.Help,
         icon: <MdHelpCenter />,
       },
     ],
@@ -92,7 +117,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const { setAuth } = useAuth();
   return (
-    <div className='fixed h-screen w-[280px] px-4 bg-white shadow-sm max-sm:hidden'>
+    <div className='scrollbar-hide fixed overflow-y-auto h-screen w-[280px] px-4 pb-10 bg-white shadow-sm max-sm:hidden'>
       <img src={AppImages.LogoIcon} alt='' style={{ height: 90 }} className='mx-auto my-3' />
       <ul>
         {

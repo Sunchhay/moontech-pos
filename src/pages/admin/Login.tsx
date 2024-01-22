@@ -1,16 +1,13 @@
-'use client'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import useAuth from '../../hook/useAuth';
+import useAuth from '../../utils/hook/useAuth';
 import { ErrorToast, SuccessToast } from '../../components/custom/Toast';
-import axios from '../../lib/axios';
+import axios from '../../utils/lib/axios';
 import { AppInput, PasswordInput } from '../../components/custom/AppInput';
 import { AppButton } from '../../components/custom/AppButton';
-import { RouteName } from '../../lib/routeName';
+import { RouteName } from '../../utils/lib/routeName';
 import Lottie from 'lottie-react';
-import { AppImages, AppLotties } from '../../lib/images';
-import { setCredentials } from '../../features/auth/authSlice';
-import { useDispatch } from 'react-redux';
+import { AppImages, AppLotties } from '../../utils/lib/images';
 import Cookies from 'js-cookie';
 
 interface ILogin {
@@ -21,7 +18,6 @@ interface ILogin {
 const Login = () => {
     const navigate = useNavigate();
     const { setAuth } = useAuth();
-    const dispatch = useDispatch();
     const [state, setState] = useState<ILogin>();
     const [error, setError] = useState<ILogin | any>();
     const [isLoading, setIsLoading] = useState(false);
@@ -48,7 +44,6 @@ const Login = () => {
             axios.post('login', state).then((res: any) => {
                 if (res.data.message === true) {
                     setAuth(res?.data?.data);
-                    dispatch(setCredentials({ token: res?.data?.data?.token, user: res?.data?.data }))
                     Cookies.set('token', res?.data?.data?.token, { expires: 7, secure: true });
                     navigate(RouteName.Menu);
                     SuccessToast('Successfully!', `Login as ${res?.data?.data?.email}`);

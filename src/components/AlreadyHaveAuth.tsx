@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import { RouteName } from '../lib/routeName';
+import { RouteName } from '../utils/lib/routeName';
 import Cookies from 'js-cookie';
 import { useCallback } from 'react';
 

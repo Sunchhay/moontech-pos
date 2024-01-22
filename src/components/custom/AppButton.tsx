@@ -3,8 +3,8 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { IoChevronDown, IoPrint } from 'react-icons/io5';
 import { ImCheckboxChecked, ImCheckboxUnchecked } from 'react-icons/im';
 import { MdModeEdit } from 'react-icons/md';
-import { IoIosCheckmarkCircle, IoIosCloseCircle, IoMdTrash } from 'react-icons/io';
-import { AppLotties } from '../../lib/images';
+import { IoIosCheckmarkCircle, IoIosCloseCircle, IoMdAddCircleOutline, IoMdTrash } from 'react-icons/io';
+import { AppLotties } from '../../utils/lib/images';
 
 interface IAppButton {
   title: string;
@@ -16,9 +16,8 @@ interface IAppButton {
 export const AppButton = (props: IAppButton) => {
   return (
     <button
-
       onClick={() => (props.onClick && !props.isLoading) && props.onClick()}
-      className={`h-[44px] flex justify-center items-center mb-4 rounded bg-green-500 font-semibold text-center text-white text-sm cursor-pointer ${!props.isLoading && 'hover:opacity-75'} ${props.className}`}
+      className={`w-full h-[44px] flex justify-center items-center mb-4 rounded bg-green-500 font-semibold text-center text-white text-sm cursor-pointer ${!props.isLoading && 'hover:opacity-75'} ${props.className}`}
     >
       {!props.isLoading ? props.title : <Lottie animationData={AppLotties.Loading} loop={true} style={{ width: 60, height: 60 }} />}
     </button>
@@ -46,7 +45,7 @@ export const FilterButton = () => {
 
   return (
     <div ref={containerRef} className='relative select-none'>
-      <button onClick={() => setIsShow(!isShow)} className='h-[38px] flex items-center gap-1.5 px-4 rounded-md text-gray-600 hover:bg-green-50'>
+      <button onClick={() => setIsShow(!isShow)} className='h-[38px] flex items-center gap-1.5 px-3 rounded-md text-gray-600 hover:bg-green-50'>
         <div className='text-sm'>{'Filters'}</div>
         <IoChevronDown />
       </button>
@@ -162,7 +161,7 @@ export const ActionButton = ({ icon, onEdit, onActive, onDelete, isActive, isLas
           onEdit && <button onClick={() => {
             setIsShow(false);
             onEdit();
-          }} className={`flex items-center text-sm px-4 py-3 gap-3 hover:bg-green-50`}>
+          }} className={`w-full flex items-center text-sm px-4 py-3 gap-3 hover:bg-green-50`}>
             <MdModeEdit size={18} className='text-purple-600' />
             <span>{'Edit'}</span>
           </button>
@@ -171,7 +170,7 @@ export const ActionButton = ({ icon, onEdit, onActive, onDelete, isActive, isLas
           onActive && <button onClick={() => {
             setIsShow(false);
             onActive();
-          }} className={`flex items-center text-sm px-4 py-3 gap-3 hover:bg-green-50`}>
+          }} className={`w-full flex items-center text-sm px-4 py-3 gap-3 hover:bg-green-50`}>
             {
               isActive ? <>
                 <IoIosCheckmarkCircle size={17} className='text-green-400' />
@@ -187,7 +186,7 @@ export const ActionButton = ({ icon, onEdit, onActive, onDelete, isActive, isLas
           onPrint && <button onClick={() => {
             setIsShow(false);
             onPrint();
-          }} className={`flex items-center text-sm px-4 py-3 gap-3 hover:bg-green-50`}>
+          }} className={`w-full flex items-center text-sm px-4 py-3 gap-3 hover:bg-green-50`}>
             <IoPrint size={18} className='text-blue-500' />
             <span>{'Print Label'}</span>
           </button>
@@ -196,7 +195,7 @@ export const ActionButton = ({ icon, onEdit, onActive, onDelete, isActive, isLas
           onDelete && <button onClick={() => {
             setIsShow(false);
             onDelete();
-          }} className={`flex items-center text-sm px-4 py-3 gap-3 hover:bg-green-50`}>
+          }} className={`w-full flex items-center text-sm px-4 py-3 gap-3 hover:bg-green-50`}>
             <IoMdTrash size={18} className='text-red-500' />
             <span>{'Delete'}</span>
           </button>
@@ -212,6 +211,15 @@ export const CheckButton = ({ isActive, onClick, className }: any) => {
       {
         isActive ? <ImCheckboxChecked className='text-green-500' size={15} /> : <ImCheckboxUnchecked className='text-gray-400' size={15} />
       }
+    </button>
+  )
+}
+
+export const AddNewButton = ({ onClick }: any) => {
+  return (
+    <button onClick={onClick} className='h-[34px] flex items-center gap-1.5 text-white text-xs bg-green-500 px-2 py-1.5 mx-2 rounded-md hover:opacity-85'>
+      <IoMdAddCircleOutline size={16} />
+      <span>Add New</span>
     </button>
   )
 }

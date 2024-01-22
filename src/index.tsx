@@ -4,10 +4,10 @@ import './index.css';
 import App from './App';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'sonner';
-import AuthProvider from './context/AuthProvider';
 import { disableReactDevTools } from '@fvilers/disable-react-devtools';
 import { Provider } from 'react-redux';
-import { store } from './features/store';
+import { store } from './redux';
+import AuthProvider from './utils/context/AuthProvider';
 
 if (process.env.NODE_ENV === 'production') {
   disableReactDevTools();

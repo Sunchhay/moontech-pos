@@ -116,7 +116,18 @@ export const FormInputArea = (props: IAppInput) => {
     </div>
 }
 
-export const FormDropdown = (props: IAppInput) => {
+interface IDropdown {
+    data: Array<any>;
+    label: string;
+    name: string;
+    type?: HTMLInputTypeAttribute;
+    value: any;
+    onChange: (e: any) => void;
+    placeholder?: string;
+    width?: string;
+}
+
+export const FormDropdown = (props: IDropdown) => {
     const [isShow, setIsShow] = useState(false);
     const containerRef = useRef<any>();
 
@@ -135,10 +146,15 @@ export const FormDropdown = (props: IAppInput) => {
         return () => window.removeEventListener("onMouseDown", onMouseDown);
     }, [onMouseDown]);
 
+    const getPlaceholder = () => {
+        let data = props.data?.find(item => props.value === item.id);
+        return data ? data?.name : null;
+    }
+
     return <div ref={containerRef} className={`relative ${props.width ? props.width : 'w-full'}  mb-4 text-[13px]`}>
         <div className='text-gray-600 mb-[3px]'>{props.label}</div>
-        <button onClick={() => setIsShow(!isShow)} className={`${'w-full px-3 py-[8px] flex justify-between items-center rounded border border-solid'} ${isShow ? 'border-teal-500' : props.error ? 'border-red-500' : 'border-gray-200'}`}>
-            {props.placeholder}
+        <button onClick={() => setIsShow(!isShow)} className={`${'w-full px-3 py-[8px] flex justify-between items-center rounded border border-solid'} ${isShow ? 'border-teal-500' : 'border-gray-200'}`}>
+            {getPlaceholder() ?? props.placeholder}
             {
                 isShow ? <IoMdArrowDropup size={18} className='text-gray-400' />
                     : <IoMdArrowDropdown size={18} className='text-gray-400' />
@@ -148,10 +164,13 @@ export const FormDropdown = (props: IAppInput) => {
             ${isShow ? 'visible opacity-100 translate-y-0' : `invisible opacity-0 -translate-y-3`} 
             border border-gray-100 border-solid z-50`}>
             {
-                [...Array(5)]?.map((item: any, index: number) => (
-                    <button className={`flex items-center text-sm px-5 py-2 gap-3 hover:bg-green-50
-              hover:text-green-500 ${false ? 'text-green-500' : 'text-gray-400'}`}>
-                        {index}
+                props.data?.map((item: any, index: number) => (
+                    <button key={index} onClick={() => {
+                        props.onChange({ target: { name: props.name, value: item?.id } });
+                        setIsShow(false);
+                    }} className={`w-full flex items-center text-sm px-5 py-2 gap-3 hover:bg-green-50
+              hover:text-green-500 ${item.id === props.value ? 'text-green-500' : 'text-gray-500'}`}>
+                        {item?.name}
                     </button>
                 ))
             }

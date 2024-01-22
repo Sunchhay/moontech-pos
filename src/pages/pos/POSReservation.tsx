@@ -1,7 +1,6 @@
-'use client'
 import Header from '../../components/pos/Header'
 
-const Reservation = () => {
+const POSReservation = () => {
     return (
         <div>
             <Header />
@@ -14,4 +13,4 @@ const Reservation = () => {
     )
 }
 
-export default Reservation
+export default POSReservation

@@ -47,6 +47,10 @@ body {
   background-color: #ddd;
 }
 
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 input,
 textarea {
   outline: none;

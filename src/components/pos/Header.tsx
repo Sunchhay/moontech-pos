@@ -1,15 +1,15 @@
-import { AppImages } from '../../lib/images'
+import { AppImages } from '../../utils/lib/images'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { RouteName } from '../../lib/routeName'
+import { RouteName } from '../../utils/lib/routeName'
 
 const menu = [
   {
     name: 'Menu',
-    path: '/menu'
+    path: RouteName.Menu
   },
   {
     name: 'Reservation',
-    path: '/reservation'
+    path: RouteName.POSReservation
   },
   {
     name: 'Table',
@@ -39,8 +39,8 @@ const Header = () => {
           ))
         }
       </div>
-      <div className='w-[280px] flex justify-between items-center'>
-        <div className='flex items-center gap-3'>
+      <div className='w-[300px] flex justify-between items-center'>
+        <div className='flex w-full items-center gap-3'>
           <img src={AppImages.Profile} alt='' style={{ height: 34 }} className='rounded-full ring-[1.5px] ring-offset-2 ring-green-500' />
           <div>
             <div className='text-sm font-semibold'>Reaksmey Sunchhay</div>
@@ -48,7 +48,7 @@ const Header = () => {
           </div>
         </div>
         <button onClick={() => { navigate(RouteName.Dashboard) }}>
-          <img src={AppImages.SwapIcon} alt='' style={{ height: 34 }} />
+          <img src={AppImages.SwapIcon} alt='' style={{ width: 38 }} />
         </button>
       </div>
 

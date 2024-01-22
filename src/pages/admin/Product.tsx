@@ -1,18 +1,18 @@
-'use client'
 import { useState } from 'react'
 import { BsThreeDots, BsThreeDotsVertical } from 'react-icons/bs';
 import { FaCamera, FaList } from 'react-icons/fa';
 import { PiSquaresFourLight } from 'react-icons/pi';
 import { GoDotFill } from 'react-icons/go';
-import { IoIosArrowBack, IoIosArrowForward, IoMdTrash } from 'react-icons/io';
+import { IoMdTrash } from 'react-icons/io';
 import { MdModeEdit } from 'react-icons/md';
 import { IoCloseCircleOutline, IoPrintOutline } from 'react-icons/io5';
 import { HiOutlineSave } from 'react-icons/hi';
 import Layout from '../../components/admin/Layout';
-import { FormDropdown, FormInput, FormInputArea, SearchInput } from '../../components/custom/AppInput';
-import { ActionButton, CheckButton, FilterButton, IconButton, IconDropDown } from '../../components/custom/AppButton';
-import { AppImages } from '../../lib/images';
+import { FormInput, FormInputArea, SearchInput } from '../../components/custom/AppInput';
+import { ActionButton, AddNewButton, FilterButton, IconButton, IconDropDown } from '../../components/custom/AppButton';
+import { AppImages } from '../../utils/lib/images';
 import Modal from '../../components/modal/Modal';
+import Pagination from '../../components/table/Pagination';
 
 const colData = ['Category', 'Price', 'Total Sales', 'Status'];
 
@@ -32,30 +32,11 @@ const Product = () => {
 
   const [isRow, setIsRow] = useState<any>(true);
   const [isAddModal, setIsAddModal] = useState<any>(false);
-  const [selected, setSelected] = useState<any>([]);
   const [state, setState] = useState<IProduct>();
   const [tableSelect, setTableSelect] = useState(['Category', 'Price', 'Total Sales', 'Status']);
 
   const handleChange = (e: any) => {
     setState((prevState: any) => ({ ...prevState, [e.target.name]: e.target.value }));
-  }
-
-  const handleSelect = (index: any) => {
-    if (selected.includes(index)) {
-      setSelected((prevState: any) => prevState.filter((prevItem: any) => prevItem !== index));
-    } else {
-      setSelected((prevState: any) => ([...prevState, index]));
-    }
-  }
-
-  const handleSelectAll = () => {
-    if (selected.length === 10) {
-      setSelected([]);
-    } else {
-      let data: any = [];
-      [...Array(10)].map((value, index) => data.push(index));
-      setSelected(data);
-    }
   }
 
   const handleSelectProfile = (e: any) => {
@@ -78,12 +59,13 @@ const Product = () => {
   }
 
   return (
-    <Layout title={'Products'} onAdd={() => { setIsAddModal(true) }}>
+    <Layout title={'Products'}>
       <div className='bg-white rounded-md my-3 shadow-sm p-4'>
         <div className='w-full flex justify-between items-center'>
           <SearchInput placeholder={'Search product...'} />
           <div className='flex items-center'>
             <FilterButton />
+            <AddNewButton onClick={() => { setIsAddModal(true) }} />
             <IconButton isActive={!isRow} onClick={() => setIsRow(false)} icon={<PiSquaresFourLight size={22} />} />
             <IconButton isActive={isRow} onClick={() => setIsRow(true)} icon={<FaList size={17} />} />
             <IconDropDown
@@ -99,8 +81,8 @@ const Product = () => {
             <table className='w-full mt-4 text-sm max-sm:text-xs'>
               <thead className='font-semibold text-gray-500 bg-gray-50'>
                 <tr>
-                  <td><CheckButton onClick={handleSelectAll} isActive={selected?.length === 10} className='h-[45px]' /></td>
-                  <td>Name</td>
+                  <td className='w-[70px] text-center'>#</td>
+                  <td className='px-1'>Product Name</td>
                   {tableSelect?.includes('Category') && <td>Category</td>}
                   {tableSelect?.includes('Price') && <td>Price</td>}
                   {tableSelect?.includes('Status') && <td className='text-center'>Status</td>}
@@ -112,21 +94,21 @@ const Product = () => {
                 {
                   [...Array(10)].map((value: any, index: any) => (
                     <tr onClick={() => { }} key={index} className='transition-all duration-200 hover:bg-green-50'>
-                      <td><CheckButton onClick={() => handleSelect(index)} isActive={selected?.includes(index)} /></td>
-                      <td className='h-[55px] flex items-center gap-3'>
+                      <td className='w-[70px] text-gray-500 text-center'>{index + 1}</td>
+                      <td className='h-[50px] flex items-center gap-3 px-1'>
                         <img src={AppImages.Product} alt='' style={{ objectFit: 'cover', width: 35, height: 28, borderRadius: 3 }} />
                         <div>Double Cheese Burger</div>
                       </td>
                       {tableSelect?.includes('Category') && <td>Food</td>}
                       {tableSelect?.includes('Price') && <td>$12.50</td>}
                       {tableSelect?.includes('Status') && <td className='text-center'>
-                        <div className='h-[55px] flex justify-center items-center'>
+                        <div className='h-[50px] flex justify-center items-center'>
                           <GoDotFill className={`${false ? 'text-green-500' : 'text-gray-300'}`} />
                         </div>
                       </td>}
                       {tableSelect?.includes('Total Sales') && <td className='text-right'>$1250.00</td>}
                       <td>
-                        <div className='h-[55px] px-1.5 flex justify-center items-center'>
+                        <div className='h-[50px] px-1.5 flex justify-center items-center'>
                           <ActionButton
                             icon={<BsThreeDotsVertical size={18} className='text-gray-500' />}
                             onEdit={() => { }}
@@ -146,12 +128,12 @@ const Product = () => {
             <>
               <div className='grid grid-cols-5 gap-4 pt-4 pb-[5.5px] px-2'>
                 {
-                  [...Array(10)].map(() => (
-                    <div className='border border-solid border-gray-200 rounded-md p-3'>
+                  [...Array(10)].map((item: any, index: number) => (
+                    <div key={index} className='border border-solid border-gray-200 rounded-md p-3'>
                       <img src={AppImages.Product} alt='' style={{ objectFit: 'cover', width: '100%', height: 'auto', borderRadius: 3 }} />
-                      <div className='text-sm mt-4'>Double Cheese Burger</div>
-                      <div className='text-sm mt-2'>$12.50</div>
-                      <div className='flex items-center gap-2 mt-5'>
+                      <div className='text-sm mt-[10px]'>Double Cheese Burger</div>
+                      <div className='text-sm mt-[5px]'>$12.50</div>
+                      <div className='flex items-center gap-2 mt-[14px]'>
                         <button onClick={() => { }} className={`w-2/4 flex justify-center items-center text-sm text-gray-500 py-1.5 gap-3 border border-gray-200 rounded-[4px] hover:border-gray-400`}>
                           <MdModeEdit size={15} />
                           <span>{'Edit'}</span>
@@ -168,26 +150,7 @@ const Product = () => {
             </>
           )
         }
-        <div className='flex justify-end items-center mt-3 mb-1'>
-          <div className='flex items-center gap-2 px-5 py-2.5 rounded-md hover:bg-gray-100'>
-            <IoIosArrowBack size={13} />
-            <span className='text-sm'>Preview</span>
-          </div>
-          <div className='flex items-center'>
-            {
-              [...Array(3)].map((value, index) => (
-                <button className={`text-sm px-4 py-2.5 flex items-center justify-center rounded-md hover:bg-gray-100`}>
-                  {index + 1}
-                </button>
-              ))
-            }
-            <BsThreeDots size={15} className='mx-4' />
-          </div>
-          <button className='flex items-center gap-2 px-5 py-2.5 rounded-md hover:bg-gray-100'>
-            <span className='text-sm'>Next</span>
-            <IoIosArrowForward size={13} />
-          </button>
-        </div>
+        <Pagination />
       </div>
       <Modal isOpen={isAddModal} handleClose={() => setIsAddModal(false)}>
         <div className='w-3/4 max-h-full bg-white rounded-md shadow-sm pt-5 px-6'>
@@ -212,8 +175,8 @@ const Product = () => {
             <div className='w-full pt-4 pb-5 pr-2'>
               <FormInput label='Product Name' placeholder='Type here' name='name' value={state?.name} onChange={handleChange} />
               <div className='flex items-center gap-3'>
-                <FormDropdown width='w-2/4' label='Brand' placeholder='Select Brand' name='description' value={state?.description} onChange={handleChange} />
-                <FormDropdown width='w-2/4' label='Category' placeholder='Select Category' name='description' value={state?.description} onChange={handleChange} />
+                {/* <FormDropdown width='w-2/4' label='Brand' placeholder='Select Brand' name='description' value={state?.description} onChange={handleChange} />
+                <FormDropdown width='w-2/4' label='Category' placeholder='Select Category' name='description' value={state?.description} onChange={handleChange} /> */}
               </div>
               <div className='flex items-center gap-3'>
                 <FormInput width='w-3/4' label='Price' placeholder='0.00' name='description' value={state?.description} onChange={handleChange} />
@@ -221,7 +184,7 @@ const Product = () => {
               </div>
               <div className='flex items-center gap-3'>
                 <FormInput width='w-3/4' label='Discount' placeholder='0' name='description' value={state?.description} onChange={handleChange} />
-                <FormDropdown width='w-1/4' label='Type' placeholder='Select' name='description' value={state?.description} onChange={handleChange} />
+                {/* <FormDropdown width='w-1/4' label='Type' placeholder='Select' name='description' value={state?.description} onChange={handleChange} /> */}
               </div>
               <FormInput label='Barcode' placeholder='#123456789' name='description' value={state?.description} onChange={handleChange} />
               <FormInputArea label='Description' placeholder='Type here' name='description' value={state?.description} onChange={handleChange} />

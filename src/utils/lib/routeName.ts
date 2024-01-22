@@ -1,0 +1,23 @@
+export const RouteName = {
+    Login: '/login',
+    Register: '/register',
+    Dashboard: '/dashboard',
+    Customers: '/customers',
+    Menu: '/pos/menu',
+    POSReservation: '/pos/reservation',
+    Variations: '/variations',
+    Brands: '/variations/brands',
+    Categories: '/variations/categories',
+    Sizes: '/variations/sizes',
+    Colors: '/variations/colors',
+    Products: '/products',
+    Sales: '/sales',
+    Reservation: '/reservation',
+    Revenue: '/revenue',
+    Reports: '/reports',
+    Teams: '/teams',
+    Profile: '/profile',
+    Settings: '/settings',
+    Help: '/help',
+}
+

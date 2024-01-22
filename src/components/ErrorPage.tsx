@@ -1,4 +1,4 @@
-import { AppImages } from '../lib/images'
+import { AppImages } from '../utils/lib/images'
 
 const ErrorPage = () => {
     return (
