@@ -13,6 +13,7 @@ export function SuccessToast(title: string, description?: string) {
     return toast(title, {
         description: description,
         icon: <IoIosCheckmarkCircle size={24} color='green' />,
-        style: { gap: 12 }
+        style: { gap: 12 },
+        className: 'font-bold'
     });
 }

@@ -4,21 +4,45 @@ import { HiOutlineSave } from 'react-icons/hi';
 import { FormDropdown, FormInput } from '../../custom/AppInput';
 import { FaCamera } from 'react-icons/fa';
 
-export interface IBrand {
+export interface ICategory {
+    id?: any;
     name: string;
     image: string;
-    status: number;
+    imageUrl: string;
+    status: any;
 }
 
 interface Props {
+    state: any;
+    setState: any;
     isOpen: boolean;
     handleClose: () => void;
-    state: IBrand | undefined;
-    handleChange: (value: IBrand) => void;
-    handleSelectImage: (value: any) => void;
+    handleSubmit: () => void;
 }
 
-const CategoryModal = ({ isOpen, handleClose, state, handleChange, handleSelectImage }: Props) => {
+const CategoryModal = ({ isOpen, handleClose, state, setState, handleSubmit }: Props) => {
+
+    const handleChange = (e: any) => {
+        setState((prevState: any) => ({ ...prevState, [e.target.name]: e.target.value }));
+    }
+
+    const handleSelectImage = (e: any) => {
+        const image = e.target.files[0];
+        setState((prevState: any) => ({
+            ...prevState,
+            imageUrl: image
+        }));
+        const reader = new FileReader();
+        reader.onload = () => {
+            const imageFile = reader.result;
+            setState((prevState: any) => ({
+                ...prevState,
+                image: imageFile,
+            }));
+        }
+        reader.readAsDataURL(image);
+    }
+
     return (
         <Modal isOpen={isOpen} handleClose={handleClose}>
             <div className='max-h-full bg-white rounded-md shadow-sm pt-5 px-6'>
@@ -29,7 +53,7 @@ const CategoryModal = ({ isOpen, handleClose, state, handleChange, handleSelectI
                             <IoCloseCircleOutline size={15} />
                             <span>Close</span>
                         </button>
-                        <button onClick={handleClose} className='flex items-center gap-1.5 text-white text-xs bg-green-500 px-2.5 py-2 rounded-md hover:opacity-85'>
+                        <button onClick={handleSubmit} className='flex items-center gap-1.5 text-white text-xs bg-green-500 px-2.5 py-2 rounded-md hover:opacity-85'>
                             <HiOutlineSave size={15} />
                             <span>Save</span>
                         </button>
@@ -37,7 +61,7 @@ const CategoryModal = ({ isOpen, handleClose, state, handleChange, handleSelectI
                 </div>
                 <div className='w-[700px] flex gap-3'>
                     <div className='pb-40 pr-5 pt-5 flex justify-start border-r border-r-gray-200'>
-                        <label htmlFor='getFile' className='w-[180px] h-[180px] border-2 border-dashed flex flex-col items-center justify-center border-gray-200 rounded'>
+                        <label htmlFor='getFile' className={`w-[180px] h-[180px] ${state?.image ? 'border-0' : 'border-2'} border-dashed flex flex-col items-center justify-center border-gray-200 rounded overflow-hidden`}>
                             {
                                 state?.image ? <img src={state?.image} alt='' width={250} height={250} style={{ width: 250, height: 250, objectFit: 'cover', borderRadius: 6 }} />
                                     : <>

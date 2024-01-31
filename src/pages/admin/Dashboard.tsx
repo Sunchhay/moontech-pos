@@ -118,7 +118,7 @@ const Dashboard = () => {
           </div>
         </div>
         <div className='w-[400px]'>
-          <div className='relative bg-white rounded-md p-5 pb-9 my-3 shadow-sm overflow-hidden'>
+          <div className='relative bg-white rounded-md p-5 pb-[35px] my-3 shadow-sm overflow-hidden'>
             <h2 className='text-md font-semibold'>Order Statistics</h2>
             <div className='flex items-center justify-between -mt-4'>
               <div>

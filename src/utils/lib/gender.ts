@@ -1,0 +1,1 @@
+export const genderList = [{ id: 'Male', name: 'Male' }, { id: 'Female', name: 'Female' }];

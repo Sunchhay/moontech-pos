@@ -5,6 +5,7 @@ export const AppImages = {
     Profile: require('../../assets/images/profile.jpeg'),
     SwapIcon: require('../../assets/images/swap-icon.png'),
     NotFound: require('../../assets/images/404.jpg'),
+    NoData: require('../../assets/images/noData.png'),
 }
 
 export const AppLotties = {

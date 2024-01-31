@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { IoChevronDown, IoPrint } from 'react-icons/io5';
 import { ImCheckboxChecked, ImCheckboxUnchecked } from 'react-icons/im';
 import { MdModeEdit } from 'react-icons/md';
-import { IoIosCheckmarkCircle, IoIosCloseCircle, IoMdAddCircleOutline, IoMdTrash } from 'react-icons/io';
+import { IoIosCheckmarkCircle, IoIosCloseCircle, IoMdAddCircleOutline, IoMdArrowDropdown, IoMdArrowDropup, IoMdTrash } from 'react-icons/io';
 import { AppLotties } from '../../utils/lib/images';
 
 interface IAppButton {
@@ -122,7 +122,7 @@ interface IActionButton {
   onActive?: () => void;
   onDelete?: () => void;
   onPrint?: () => void;
-  isActive?: string;
+  isActive?: any;
   isLast?: boolean;
 }
 
@@ -172,7 +172,7 @@ export const ActionButton = ({ icon, onEdit, onActive, onDelete, isActive, isLas
             onActive();
           }} className={`w-full flex items-center text-sm px-4 py-3 gap-3 hover:bg-green-50`}>
             {
-              isActive ? <>
+              !isActive ? <>
                 <IoIosCheckmarkCircle size={17} className='text-green-400' />
                 <span>{'Activate'}</span>
               </> : <>
@@ -217,9 +217,60 @@ export const CheckButton = ({ isActive, onClick, className }: any) => {
 
 export const AddNewButton = ({ onClick }: any) => {
   return (
-    <button onClick={onClick} className='h-[34px] flex items-center gap-1.5 text-white text-xs bg-green-500 px-2 py-1.5 mx-2 rounded-md hover:opacity-85'>
+    <button onClick={onClick} className='h-[34px] w-[90px] flex items-center justify-center gap-1.5 text-white text-[11px] sm:text-xs bg-green-500 py-1.5 mx-2 rounded-md hover:opacity-85'>
       <IoMdAddCircleOutline size={16} />
-      <span>Add New</span>
+      <div>Add New</div>
     </button>
+  )
+}
+
+export const AppDropDownButton = ({ data, onChange, value, placeholder }: any) => {
+  const [isShow, setIsShow] = useState(false);
+  const containerRef = useRef<any>();
+
+  const onMouseDown = useCallback(
+    (e: any) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
+        setIsShow(false);
+      }
+    },
+    [containerRef, setIsShow]
+  );
+
+  useEffect(() => {
+    window.addEventListener("mousedown", onMouseDown);
+
+    return () => window.removeEventListener("mousedown", onMouseDown);
+  }, [onMouseDown]);
+
+  const toggleisShow = () => {
+    setIsShow(!isShow);
+  }
+
+  return (
+    <div ref={containerRef} className='relative select-none'>
+      <button onClick={toggleisShow} className={`pl-4 pr-3 h-[36px] bg-gray-50 gap-1 flex justify-center items-center rounded-md ${isShow ? 'text-green-500' : 'text-gray-600'} hover:bg-green-50`}>
+        <div className='text-[13px]'>{(value?.id >= 0 && value?.name) ? value?.name : placeholder}</div>
+        {
+          isShow ? <IoMdArrowDropup size={18} className='text-gray-400' />
+            : <IoMdArrowDropdown size={18} className='text-gray-400' />
+        }
+      </button>
+      <div className={`w-[150px] absolute shadow-lg py-2 top-[40px] right-0 left-0 bg-white rounded-md transition-all duration-200
+            ${isShow ? 'visible opacity-100 translate-y-0' : `invisible opacity-0 -translate-y-3`} 
+            border border-gray-100 border-solid z-50`}>
+        {
+          data?.map((item: any, index: number) => (
+            <button key={index} onClick={() => {
+              onChange(item);
+              setIsShow(false);
+            }} className={`w-full flex items-center text-[13px] px-5 py-2 gap-3 hover:bg-green-50
+              hover:text-green-500 ${item?.id === value?.id ? 'text-green-500' : 'text-gray-500'}`}>
+              {item?.name}
+            </button>
+          ))
+        }
+      </div>
+    </div >
   )
 }

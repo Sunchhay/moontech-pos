@@ -9,15 +9,20 @@ import AlreadyHaveAuth from './components/AlreadyHaveAuth';
 import ErrorPage from './components/ErrorPage';
 import { RouteName } from './utils/lib/routeName';
 import Brand from './pages/admin/Brand';
-import Category from './pages/admin/Category';
 import Color from './pages/admin/Color';
-import Size from './pages/admin/Size';
 import MainAdmin from './components/admin/MainAdmin';
 import Customer from './pages/admin/Customer';
 import Help from './pages/admin/Help';
 import Sale from './pages/admin/Sale';
 import POSReservation from './pages/pos/POSReservation';
 import Reservation from './pages/admin/Reservation';
+import Category from './pages/admin/Category';
+import Attribute from './pages/admin/Attribute';
+import Profile from './pages/admin/Profile';
+import Setting from './pages/admin/Setting';
+import Revenue from './pages/admin/Revenue';
+import Team from './pages/admin/Team';
+import Report from './pages/admin/Report';
 
 function App() {
 
@@ -40,17 +45,17 @@ function App() {
           <Route path={RouteName.Brands} element={<Brand />} />
           <Route path={RouteName.Categories} element={<Category />} />
           <Route path={RouteName.Colors} element={<Color />} />
-          <Route path={RouteName.Sizes} element={<Size />} />
+          <Route path={RouteName.Attributes} element={<Attribute />} />
           <Route path={RouteName.Products} element={<Product />} />
           <Route path={RouteName.Reservation} element={<Reservation />} />
           <Route path={RouteName.Sales} element={<Sale />} />
           {/* Analytics */}
-          <Route path={RouteName.Revenue} element={<Product />} />
-          <Route path={RouteName.Reports} element={<Product />} />
-          <Route path={RouteName.Teams} element={<Product />} />
+          <Route path={RouteName.Revenue} element={<Revenue />} />
+          <Route path={RouteName.Reports} element={<Report />} />
+          <Route path={RouteName.Teams} element={<Team />} />
           {/* User */}
-          <Route path={RouteName.Profile} element={<Product />} />
-          <Route path={RouteName.Settings} element={<Product />} />
+          <Route path={RouteName.Profile} element={<Profile />} />
+          <Route path={RouteName.Settings} element={<Setting />} />
           <Route path={RouteName.Help} element={<Help />} />
           <Route path={RouteName.Teams} element={<Product />} />
         </Route>

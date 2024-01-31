@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ReactPortal from "./ReactPortal";
 
 interface ModalProps {
@@ -8,6 +8,7 @@ interface ModalProps {
 }
 
 function Modal({ children, isOpen, handleClose }: ModalProps) {
+
     useEffect(() => {
         const closeOnEscapeKey = (e: any) => e.key === "Escape" ? handleClose() : null;
         document.body.addEventListener("keydown", closeOnEscapeKey);
@@ -27,10 +28,10 @@ function Modal({ children, isOpen, handleClose }: ModalProps) {
 
     return (
         <ReactPortal wrapperId="react-portal-modal-container">
-            <div className={'modal'}>
+            <div style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }} className={`fixed inset-0 flex flex-col items-center justify-center p-5 overflow-hidden z-[999]`}>
                 {children}
             </div>
-        </ReactPortal>
+        </ReactPortal >
     );
 };
 

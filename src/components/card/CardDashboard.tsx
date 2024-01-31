@@ -1,7 +1,7 @@
 
 const CardDashboard = ({ item }: any) => {
     return (
-        <button className='flex gap-3 w-full bg-white rounded shadow-sm p-4 text-sm'>
+        <button className='flex gap-3 w-full bg-white rounded shadow-sm p-4 text-sm text-left'>
             <div className="w-[30px] h-[30px] flex justify-center">
                 {item?.icon}
             </div>

@@ -1,96 +1,133 @@
-import { useState } from 'react'
-import { BsThreeDots, BsThreeDotsVertical } from 'react-icons/bs';
-import { GoDotFill } from 'react-icons/go';
-import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import { useEffect, useState } from 'react'
 import Layout from '../../components/admin/Layout';
 import { SearchInput } from '../../components/custom/AppInput';
-import { ActionButton, AddNewButton, FilterButton } from '../../components/custom/AppButton';
-import ColorModal from '../../components/modal/admin/ColorModal';
+import { AddNewButton, AppDropDownButton } from '../../components/custom/AppButton';
+import { useAppDispatch, useAppSelector } from '../../utils/hook/useRedux';
+import DeleteDialog from '../../components/modal/dialog/DeleteDialog';
+import axios, { ApiManager } from '../../utils/lib/axios';
+import { ErrorToast, SuccessToast } from '../../components/custom/Toast';
+import Pagination from '../../components/table/Pagination';
+import ColorTable from '../../components/table/ColorTable';
+import ColorModal, { IColor } from '../../components/modal/admin/ColorModal';
+import { getColor, getColorSuccess } from '../../redux/actions/color.action';
 
 const Color = () => {
-
+  const dispatch = useAppDispatch();
+  const colorState = useAppSelector(state => state.color);
   const [isOpen, setIsOpen] = useState<any>(false);
-  const [state, setState] = useState<any>({ status: 1 });
+  const [isShowDelete, setIsShowDelete] = useState<boolean>(false);
+  const [search, setSearch] = useState<any>();
+  const [status, setStatus] = useState<any>({ id: null, name: 'All' });
+  const [state, setState] = useState<IColor>({ name: '', code: '', status: 1 });
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const handleChange = (e: any) => {
-    setState((prevState: any) => ({ ...prevState, [e.target.name]: e.target.value }));
+  useEffect(() => {
+    dispatch(getColor({ page: currentPage }));
+  }, [currentPage]);
+
+  const handlePost = () => {
+    ApiManager.POST(state?.id ? 'color/update' : 'color/create', state).then((response: any) => {
+      if (response?.message === true) {
+        dispatch(getColorSuccess(response));
+        SuccessToast('Success', state?.name + ' has been saved successfully!');
+      } else {
+        ErrorToast('Error', 'Something went wrong, try again!');
+      }
+      setIsOpen(false);
+    }).catch((err) => {
+      console.log(err);
+      ErrorToast('Error', 'Something went wrong, try again!');
+    })
   }
+
+  const handleDelete = () => {
+    if (state?.id) {
+      ApiManager.POST('color/delete', { id: state?.id }).then((response: any) => {
+        if (response?.message === true) {
+          dispatch(getColorSuccess(response));
+          SuccessToast('Success', state?.name + ' has been deleted successfully!');
+        } else {
+          ErrorToast('Error', 'Something went wrong, try again!');
+        }
+      }).catch((err) => {
+        console.log(err);
+      });
+    }
+    setIsShowDelete(false);
+  }
+
+  const handleUpdateStatus = (item: any) => {
+    ApiManager.POST('color/update', { id: item?.id, status: item?.status === 1 ? 0 : 1 }).then((response: any) => {
+      if (response?.message === true) {
+        dispatch(getColorSuccess(response));
+        SuccessToast('Success', item?.name + ' has been ' + (item?.status === 1 ? 'deactivate' : 'activate') + ' successfully!');
+      } else {
+        ErrorToast('Error', 'Something went wrong, try again!');
+      }
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+
+  const handleSearch = (e: any) => {
+    setSearch(e.target.value);
+    dispatch(getColor({ page: currentPage, keyword: e.target.value }));
+  }
+
 
   return (
     <Layout title='Colors'>
       <div className='bg-white rounded-md my-3 shadow-sm p-4'>
         <div className='w-full flex justify-between items-center'>
-          <SearchInput placeholder={'Search color...'} />
+          <SearchInput placeholder={'Search category...'} value={search} onChange={handleSearch} />
           <div className='flex items-center'>
-            <FilterButton />
-            <AddNewButton onClick={() => { setIsOpen(true) }} />
+            <AppDropDownButton
+              placeholder={'Status'}
+              data={[{ id: null, name: 'All' }, { id: 1, name: 'Active' }, { id: 0, name: 'Inactive' }]}
+              value={status}
+              onChange={(value: any) => {
+                setStatus(value);
+                dispatch(getColor({ page: currentPage, keyword: search, status: value?.id }));
+              }}
+            />
+            <AddNewButton onClick={() => {
+              setIsOpen(true);
+              setState({ status: 1, name: '', code: '', id: '' });
+            }} />
           </div>
         </div>
-        <table className='w-full mt-4 text-sm max-sm:text-xs'>
-          <thead className='font-semibold text-gray-500 bg-gray-50'>
-            <tr>
-              <td className='w-[70px] text-center'>#</td>
-              <td className='px-1'>Color Name</td>
-              <td className='w-[140px] text-center'>Color Code</td>
-              <td className='text-center w-[80px]'>Status</td>
-              <td className='h-[45px] flex justify-center items-center'>Action</td>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              [...Array(10)].map((value: any, index: any) => (
-                <tr onClick={() => { }} key={index} className='transition-all duration-200 hover:bg-green-50'>
-                  <td className='w-[70px] text-gray-500 text-center'>{index + 1}</td>
-                  <td className='h-[50px] flex items-center gap-3 px-1'>Double Cheese Burger</td>
-                  <td className='w-[140px] text-center'>#792433</td>
-                  <td className='text-center w-[80px]'>
-                    <div className='h-[50px] flex justify-center items-center'>
-                      <GoDotFill className={`${false ? 'text-green-500' : 'text-gray-300'}`} />
-                    </div>
-                  </td>
-                  <td>
-                    <div className='h-[50px] px-1.5 flex justify-center items-center'>
-                      <ActionButton
-                        icon={<BsThreeDotsVertical size={18} className='text-gray-500' />}
-                        onEdit={() => { }}
-                        onActive={() => { }}
-                        onDelete={() => { }}
-                        onPrint={() => { }}
-                        isLast={index === 9}
-                      />
-                    </div>
-                  </td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
-        <div className='flex justify-end items-center mt-3 mb-1'>
-          <div className='flex items-center gap-2 px-5 py-2.5 rounded-md hover:bg-gray-100'>
-            <IoIosArrowBack size={13} />
-            <span className='text-sm'>Preview</span>
-          </div>
-          <div className='flex items-center'>
-            {
-              [...Array(3)].map((value, index) => (
-                <button key={index} className={`text-sm px-4 py-2.5 flex items-center justify-center rounded-md hover:bg-gray-100`}>
-                  {index + 1}
-                </button>
-              ))
-            }
-            <BsThreeDots size={15} className='mx-4' />
-          </div>
-          <button className='flex items-center gap-2 px-5 py-2.5 rounded-md hover:bg-gray-100'>
-            <span className='text-sm'>Next</span>
-            <IoIosArrowForward size={13} />
-          </button>
-        </div>
+        <ColorTable
+          data={colorState?.data}
+          onActive={handleUpdateStatus}
+          onDelete={(item: any) => {
+            setState(item);
+            setIsShowDelete(true);
+          }}
+          onEdit={(item: any) => {
+            setState(item);
+            setIsOpen(true);
+          }}
+        />
+        {
+          colorState?.data?.length > 0 ? <Pagination
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPage={colorState?.paginate?.totalPages}
+          /> : <div className='h-[58px]' />
+        }
       </div>
       <ColorModal
         isOpen={isOpen}
+        handleClose={() => setIsOpen(false)}
+        handleSubmit={handlePost}
         state={state}
-        handleChange={handleChange}
-        handleClose={() => { setIsOpen(false) }}
+        setState={setState}
+      />
+      <DeleteDialog
+        isOpen={isShowDelete}
+        handleClose={() => setIsShowDelete(false)}
+        handleDelete={handleDelete}
+        title={state?.name}
       />
     </Layout>
   )

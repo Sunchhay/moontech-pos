@@ -27,8 +27,8 @@ function ReactPortal({ children, wrapperId }: IReactPortal) {
         }
         setWrapperElement(element!);
 
-        return ()=>{
-            if(systemCreated && element?.parentNode) {
+        return () => {
+            if (systemCreated && element?.parentNode) {
                 element.parentNode.removeChild(element);
             }
         }

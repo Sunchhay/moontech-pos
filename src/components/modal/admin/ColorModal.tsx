@@ -1,22 +1,29 @@
 import Modal from '../Modal'
 import { IoCloseCircleOutline } from 'react-icons/io5';
 import { HiOutlineSave } from 'react-icons/hi';
-import { FormDropdown, FormInput } from '../../custom/AppInput';
+import { ColorInput, FormDropdown, FormInput } from '../../custom/AppInput';
 
-export interface IBrand {
+export interface IColor {
+    id?: any;
     name: string;
-    image: string;
-    status: number;
+    code: string;
+    status: any;
 }
 
 interface Props {
     isOpen: boolean;
     handleClose: () => void;
-    state: IBrand | undefined;
-    handleChange: (value: IBrand) => void;
+    state: IColor | undefined;
+    setState: any;
+    handleSubmit: () => void;
 }
 
-const ColorModal = ({ isOpen, handleClose, state, handleChange }: Props) => {
+const ColorModal = ({ isOpen, handleClose, state, setState, handleSubmit }: Props) => {
+
+    const handleChange = (e: any) => {
+        setState((prevState: any) => ({ ...prevState, [e.target.name]: e.target.value }));
+    }
+
     return (
         <Modal isOpen={isOpen} handleClose={handleClose}>
             <div className='max-h-full bg-white rounded-md shadow-sm pt-5 px-6'>
@@ -27,7 +34,7 @@ const ColorModal = ({ isOpen, handleClose, state, handleChange }: Props) => {
                             <IoCloseCircleOutline size={15} />
                             <span>Close</span>
                         </button>
-                        <button onClick={handleClose} className='flex items-center gap-1.5 text-white text-xs bg-green-500 px-2.5 py-2 rounded-md hover:opacity-85'>
+                        <button onClick={handleSubmit} className='flex items-center gap-1.5 text-white text-xs bg-green-500 px-2.5 py-2 rounded-md hover:opacity-85'>
                             <HiOutlineSave size={15} />
                             <span>Save</span>
                         </button>
@@ -36,7 +43,7 @@ const ColorModal = ({ isOpen, handleClose, state, handleChange }: Props) => {
                 <div className='w-[500px] flex gap-3'>
                     <div className='w-full pt-4 pb-6 pr-2'>
                         <FormInput label='Name' placeholder='Type here' name='name' value={state?.name} onChange={handleChange} />
-                        <FormInput label='Code #' placeholder='########' name='code' value={state?.name} onChange={handleChange} />
+                        <ColorInput label='Code' placeholder='########' name='code' value={state?.code} onChange={handleChange} />
                         <FormDropdown
                             label='Status'
                             name='status'

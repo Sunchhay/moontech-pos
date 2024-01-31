@@ -8,7 +8,7 @@ export const RouteName = {
     Variations: '/variations',
     Brands: '/variations/brands',
     Categories: '/variations/categories',
-    Sizes: '/variations/sizes',
+    Attributes: '/variations/attributes',
     Colors: '/variations/colors',
     Products: '/products',
     Sales: '/sales',
