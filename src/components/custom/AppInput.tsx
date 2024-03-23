@@ -75,7 +75,7 @@ export const FormInput = (props: IAppInput) => {
             {props.label}
             {props.error && <div className='text-red-500 ml-1'>{props.error}</div>}
         </div>
-        <div className={`flex items-center rounded border border-solid bg-gray-50 ${isFocus ? 'border-teal-500' : props.error ? 'border-red-500' : 'border-gray-200'}`}>
+        <div className={`flex items-center rounded border border-solid ${isFocus ? 'border-teal-500' : props.error ? 'border-red-500' : 'border-gray-200'}`}>
             <input
                 name={props.name}
                 placeholder={props.placeholder}
@@ -181,7 +181,7 @@ export const FormDropdown = (props: IDropdown) => {
 
     return <div ref={containerRef} className={`relative ${props.width ? props.width : 'w-full'}  mb-4 text-[13px] `}>
         <div className='text-gray-600 mb-[3px]'>{props.label}</div>
-        <button onClick={() => setIsShow(!isShow)} className={`${getPlaceholder() ? 'text-black' : 'text-gray-400'} ${'w-full px-3 py-[8px] flex justify-between items-center rounded border border-solid'} ${isShow ? 'border-teal-500' : 'border-gray-200'} bg-gray-50`}>
+        <button onClick={() => setIsShow(!isShow)} className={`${getPlaceholder() ? 'text-black' : 'text-gray-400'} ${'w-full px-3 py-[8px] flex justify-between items-center rounded border border-solid'} ${isShow ? 'border-teal-500' : 'border-gray-200'}`}>
             {getPlaceholder() ?? props.placeholder}
             <IoMdArrowDropup size={18} className={`text-gray-400 ${!isShow && 'hidden'}`} />
             <IoMdArrowDropdown size={18} className={`text-gray-400 ${isShow && 'hidden'}`} />

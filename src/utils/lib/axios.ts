@@ -1,6 +1,7 @@
 import axios from "axios";
 
-export const BaseUrl = 'http://192.168.0.103:8080/api/v1/';
+export const BaseUrl = 'http://192.168.1.4:8080/api/v1/';
+// export const BaseUrl = 'http://192.168.0.103:8080/api/v1/';
 // export const BaseUrl = 'http://172.20.10.9:8080/api/v1/';
 
 let token = localStorage.getItem('token');

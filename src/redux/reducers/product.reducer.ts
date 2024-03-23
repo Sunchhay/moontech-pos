@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { getProduct, getProductError, getProductSuccess } from '../actions/product.action';
+import { getAllProduct, getAllProductError, getAllProductSuccess, getProduct, getProductError, getProductSuccess } from '../actions/product.action';
 
 const initialState = {
   loading: false,
@@ -27,3 +27,24 @@ const ProductReducer = createReducer(initialState, builder => {
 });
 
 export { ProductReducer };
+
+const allProductState = {
+  loading: false,
+  data: [],
+};
+
+const AllProductReducer = createReducer(allProductState, builder => {
+  builder
+    .addCase(getAllProduct, state => {
+      state.loading = true;
+    })
+    .addCase(getAllProductSuccess, (state, action) => {
+      state.loading = false;
+      state.data = action.payload.data;
+    })
+    .addCase(getAllProductError, (state, action) => {
+      state.loading = false;
+    });
+});
+
+export { AllProductReducer };

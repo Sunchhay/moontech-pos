@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BsThreeDots, BsThreeDotsVertical } from 'react-icons/bs';
 import { FaList } from 'react-icons/fa';
 import { PiSquaresFourLight } from 'react-icons/pi';
@@ -7,16 +7,23 @@ import { IoMdTrash } from 'react-icons/io';
 import { MdModeEdit } from 'react-icons/md';
 import Layout from '../../components/admin/Layout';
 import { SearchInput } from '../../components/custom/AppInput';
-import { ActionButton, AddNewButton, FilterButton, IconButton, IconDropDown } from '../../components/custom/AppButton';
+import { ActionButton, AddNewButton, AppDropDownButton, FilterButton, IconButton, IconDropDown } from '../../components/custom/AppButton';
 import { AppImages } from '../../utils/lib/images';
 import Pagination from '../../components/table/Pagination';
 import ProductModal from '../../components/modal/admin/ProductModal';
-import { useAppDispatch } from '../../utils/hook/useRedux';
+import { useAppDispatch, useAppSelector } from '../../utils/hook/useRedux';
 import ProductTable from '../../components/table/ProductTable';
+import { getProduct } from '../../redux/actions/product.action';
+import { ApiManager } from '../../utils/lib/axios';
+import { ErrorToast, SuccessToast } from '../../components/custom/Toast';
+import DeleteDialog from '../../components/modal/dialog/DeleteDialog';
+import { ProductFilter } from '../../components/custom/ProductFilter';
+import { formatter } from '../../utils/lib/format';
 
 const colData = ['Category', 'Price', 'Total Sales', 'Status'];
 
 interface IProduct {
+  id?: any;
   category_id: number;
   name: string;
   description: string;
@@ -30,24 +37,23 @@ interface IProduct {
 
 const Product = () => {
   const dispatch = useAppDispatch();
+  const productState = useAppSelector(state => state.product);
   const [isRow, setIsRow] = useState<any>(true);
   const [isOpen, setIsOpen] = useState<any>(false);
+  const [isDelete, setIsDelete] = useState<any>(false);
   const [state, setState] = useState<IProduct>();
+  const [filter, setFilter] = useState({
+    category: null,
+    brand: null,
+    status: null,
+    color: null,
+  });
+  const [currentPage, setCurrentPage] = useState(1);
   const [tableSelect, setTableSelect] = useState(['Category', 'Price', 'Total Sales', 'Status']);
 
-  const handleChange = (e: any) => {
-    setState((prevState: any) => ({ ...prevState, [e.target.name]: e.target.value }));
-  }
-
-  const handleSelectProfile = (e: any) => {
-    const image = e.target.files[0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      const imageUrl = reader.result;
-      setState((prevState: any) => ({ ...prevState, image: imageUrl }));
-    }
-    reader.readAsDataURL(image);
-  }
+  useEffect(() => {
+    dispatch(getProduct({ page: 1 }));
+  }, []);
 
   const onSelect = (item: any) => {
     if (tableSelect?.includes(item)) {
@@ -58,14 +64,52 @@ const Product = () => {
     }
   }
 
+  const handleUpdateStatus = (item: any) => {
+    ApiManager.POST('product/updateStatus', { id: item?.id, status: item?.status === 1 ? 0 : 1 }).then((response: any) => {
+      if (response?.message === true) {
+        dispatch(getProduct({ page: 1 }));
+        SuccessToast('Success', item?.name + ' has been ' + (item?.status === 1 ? 'deactivate' : 'activate') + ' successfully!');
+      } else {
+        ErrorToast('Error', 'Something went wrong, try again!');
+      }
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+
+  const handleDelete = () => {
+    setIsDelete(false);
+    ApiManager.POST('product/delete', { id: state?.id }).then((response: any) => {
+      if (response?.message === true) {
+        dispatch(getProduct({ page: 1 }));
+        SuccessToast('Success', state?.name + ' has been deleted successfully!');
+      } else {
+        ErrorToast('Error', 'Something went wrong, try again!');
+      }
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+
   return (
     <Layout title={'Products'}>
       <div className='bg-white rounded-md my-3 shadow-sm p-4'>
         <div className='w-full flex justify-between items-center'>
           <SearchInput placeholder={'Search product...'} />
-          <div className='flex items-center'>
-            <FilterButton />
-            <AddNewButton onClick={() => { setIsOpen(true) }} />
+          <div className='flex items-center gap-2'>
+            <ProductFilter
+              placeholder={'Filter'}
+              data={[{ id: null, name: 'All' }, { id: 1, name: 'Active' }, { id: 0, name: 'Inactive' }]}
+              value={filter?.status}
+              onChange={(value: any) => {
+                // setStatus(value);
+                // dispatch(getCategory({ page: currentPage, keyword: search, status: value?.id }));
+              }}
+            />
+            <AddNewButton onClick={() => {
+              setIsOpen(true);
+              setState(undefined);
+            }} />
             <IconButton isActive={!isRow} onClick={() => setIsRow(false)} icon={<PiSquaresFourLight size={22} />} />
             <IconButton isActive={isRow} onClick={() => setIsRow(true)} icon={<FaList size={17} />} />
             <IconDropDown
@@ -78,68 +122,47 @@ const Product = () => {
         </div>
         {
           isRow ? (
-            <ProductTable data={[...Array(10)]} />
-            // <table className='w-full mt-4 text-sm max-sm:text-xs'>
-            //   <thead className='font-semibold text-gray-500 bg-gray-50'>
-            //     <tr>
-            //       <td className='w-[70px] text-center'>#</td>
-            //       <td className='px-1'>Product Name</td>
-            //       {tableSelect?.includes('Category') && <td>Category</td>}
-            //       {tableSelect?.includes('Price') && <td>Price</td>}
-            //       {tableSelect?.includes('Status') && <td className='text-center'>Status</td>}
-            //       {tableSelect?.includes('Total Sales') && <td className='text-right'>Total Sales</td>}
-            //       <td className='h-[45px] flex justify-center items-center'>Action</td>
-            //     </tr>
-            //   </thead>
-            //   <tbody>
-            //     {
-            //       [...Array(10)].map((value: any, index: any) => (
-            //         <tr onClick={() => { }} key={index} className='transition-all duration-200 hover:bg-green-50'>
-            //           <td className='w-[70px] text-gray-500 text-center'>{index + 1}</td>
-            //           <td className='h-[50px] flex items-center gap-3 px-1'>
-            //             <img src={AppImages.Product} alt='' style={{ objectFit: 'cover', width: 35, height: 28, borderRadius: 3 }} />
-            //             <div>Double Cheese Burger</div>
-            //           </td>
-            //           {tableSelect?.includes('Category') && <td>Food</td>}
-            //           {tableSelect?.includes('Price') && <td>$12.50</td>}
-            //           {tableSelect?.includes('Status') && <td className='text-center'>
-            //             <div className='h-[50px] flex justify-center items-center'>
-            //               <GoDotFill className={`${false ? 'text-green-500' : 'text-gray-300'}`} />
-            //             </div>
-            //           </td>}
-            //           {tableSelect?.includes('Total Sales') && <td className='text-right'>$1250.00</td>}
-            //           <td>
-            //             <div className='h-[50px] px-1.5 flex justify-center items-center'>
-            //               <ActionButton
-            //                 icon={<BsThreeDotsVertical size={18} className='text-gray-500' />}
-            //                 onEdit={() => { }}
-            //                 onActive={() => { }}
-            //                 onDelete={() => { }}
-            //                 onPrint={() => { }}
-            //                 isLast={index === 9}
-            //               />
-            //             </div>
-            //           </td>
-            //         </tr>
-            //       ))
-            //     }
-            //   </tbody>
-            // </table>
+            <ProductTable
+              data={productState.data}
+              onActive={handleUpdateStatus}
+              onDelete={(item: any) => {
+                setState(item);
+                setIsDelete(true);
+              }}
+              onEdit={(item: any) => {
+                setState(item);
+                setIsOpen(true);
+              }}
+            />
           ) : (
             <>
               <div className='grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-4 pt-4 pb-[5.5px] px-1 sm:px-2'>
                 {
-                  [...Array(10)].map((item: any, index: number) => (
+                  productState?.data?.length > 0 && productState.data.map((item: any, index: number) => (
                     <div key={index} className='border border-solid border-gray-200 rounded-md p-3'>
-                      <img src={AppImages.Product} alt='' style={{ objectFit: 'cover', width: '100%', height: 'auto', borderRadius: 3 }} />
-                      <div className='text-sm mt-[10px]'>Double Cheese Burger</div>
-                      <div className='text-sm mt-[5px]'>$12.50</div>
+                      <img src={item?.image ?? AppImages.Product} alt='' style={{ objectFit: 'cover', width: '100%', height: 160, borderRadius: 3 }} />
+                      <div className='text-[13px] mt-[10px] flex items-center'>
+                        {item?.name}
+                        {
+                          item?.color?.code && <div className='w-[12px] h-[12px] rounded-full ml-1.5' style={{ backgroundColor: item?.color?.code }}></div>
+                        }
+                      </div>
+                      <div className='text-[12px] text-gray-600'>
+                        {item?.brand?.name} - {item?.category?.name}
+                      </div>
+                      <div className='text-[13px] mt-[5px] text-black'>{formatter.format(item?.sale_price)}</div>
                       <div className='flex items-center gap-2 mt-[14px]'>
-                        <button onClick={() => { }} className={`w-2/4 flex justify-center items-center text-[13px] text-gray-500 py-1.5 gap-1 sm:gap-3 border border-gray-200 rounded-[4px] hover:border-gray-400`}>
+                        <button onClick={() => {
+                          setState(item);
+                          setIsOpen(true);
+                        }} className={`w-2/4 flex justify-center items-center text-[13px] text-gray-500 py-1.5 gap-1 sm:gap-3 border border-gray-200 rounded-[4px] hover:border-gray-400`}>
                           <MdModeEdit size={15} />
                           <span>{'Edit'}</span>
                         </button>
-                        <button onClick={() => { }} className={`w-2/4 flex justify-center items-center text-[13px] text-red-500 py-1.5 gap-1 sm:gap-3 border border-gray-200 rounded-[4px] hover:border-red-500`}>
+                        <button onClick={() => {
+                          setState(item);
+                          setIsDelete(true);
+                        }} className={`w-2/4 flex justify-center items-center text-[13px] text-red-500 py-1.5 gap-1 sm:gap-3 border border-gray-200 rounded-[4px] hover:border-red-500`}>
                           <IoMdTrash size={15} />
                           <span>{'Delete'}</span>
                         </button>
@@ -151,12 +174,27 @@ const Product = () => {
             </>
           )
         }
-        <Pagination />
+        {
+          productState?.data?.length > 0 ? <Pagination
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPage={productState?.paginate?.totalPages}
+          /> : <div className='h-[58px]' />
+        }
       </div>
       {
         isOpen && <ProductModal
+          data={state}
           isOpen={isOpen}
           handleClose={() => setIsOpen(false)}
+        />
+      }
+      {
+        isDelete && <DeleteDialog
+          title={state?.name}
+          isOpen={isDelete}
+          handleDelete={handleDelete}
+          handleClose={() => setIsDelete(false)}
         />
       }
     </Layout>

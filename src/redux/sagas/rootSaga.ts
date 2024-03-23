@@ -4,7 +4,8 @@ import { watchFetchAllColor, watchFetchColor } from './color.saga';
 import { watchFetchAllAttribute, watchFetchAttribute, watchFetchSubAttribute } from './attribute.saga';
 import { watchFetchAllCategory, watchFetchCategory } from './category.saga';
 import { watchFetchCustomer } from './customer.saga';
-import { watchFetchProduct } from './product.saga';
+import { watchFetchAllProduct, watchFetchProduct } from './product.saga';
+import { watchFetchCart } from './cart.saga';
 
 function* rootSaga() {
   yield all([
@@ -19,6 +20,8 @@ function* rootSaga() {
     watchFetchAllAttribute(),
     watchFetchSubAttribute(),
     watchFetchProduct(),
+    watchFetchAllProduct(),
+    watchFetchCart(),
   ]);
 }
 

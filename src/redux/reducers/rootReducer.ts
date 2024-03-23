@@ -6,7 +6,8 @@ import { AllAttributeReducer, AttributeReducer, SubAttributeReducer } from './at
 import { CustomerReducer } from './customer.reducer';
 import { ProfileReducer } from './profile.reducer';
 import { SideBarReducer } from './index.reducer';
-import { ProductReducer } from './product.reducer';
+import { AllProductReducer, ProductReducer } from './product.reducer';
+import { CartReducer } from './cart.reducer';
 
 const rootReducer = combineReducers({
   sideBar: SideBarReducer,
@@ -22,6 +23,8 @@ const rootReducer = combineReducers({
   allAttribute: AllAttributeReducer,
   subAttribute: SubAttributeReducer,
   product: ProductReducer,
+  allProduct: AllProductReducer,
+  cart: CartReducer,
 });
 
 export default rootReducer;

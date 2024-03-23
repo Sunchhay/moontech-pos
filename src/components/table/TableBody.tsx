@@ -4,7 +4,7 @@ interface Props {
 
 const TableBody = ({ children }: Props) => {
   return (
-    <div className="pt-1 h-full">
+    <div className="pt-1 h-full overflow-y-auto scrollbar-hide">
       {children}
     </div>
   )

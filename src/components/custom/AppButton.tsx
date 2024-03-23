@@ -217,7 +217,7 @@ export const CheckButton = ({ isActive, onClick, className }: any) => {
 
 export const AddNewButton = ({ onClick }: any) => {
   return (
-    <button onClick={onClick} className='h-[34px] w-[90px] flex items-center justify-center gap-1.5 text-white text-[11px] sm:text-xs bg-green-500 py-1.5 mx-2 rounded-md hover:opacity-85'>
+    <button onClick={onClick} className='h-[34px] w-[90px] flex items-center justify-center gap-1.5 text-white text-[11px] sm:text-xs bg-green-500 py-1.5 rounded-md hover:opacity-85'>
       <IoMdAddCircleOutline size={16} />
       <div>Add New</div>
     </button>

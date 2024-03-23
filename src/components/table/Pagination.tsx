@@ -1,6 +1,5 @@
 import { BsThreeDots } from 'react-icons/bs'
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
-import { AppInput } from '../custom/AppInput';
 import { useEffect, useState } from 'react';
 import { ErrorToast } from '../custom/Toast';
 
@@ -47,12 +46,12 @@ const Pagination = (props: Props) => {
     }
 
     return (
-        <div className='text-xs xl:text-sm flex items-center justify-between'>
-            <div className='flex justify-end items-center mt-3 mb-1 gap-1'>
+        <div className='text-xs xl:text-sm flex items-center justify-between bg-white'>
+            <div className='flex justify-end items-center my-1 gap-1'>
                 <div className=' mr-2'>Total: {totalPage} Pages</div>
                 <input
                     name={'page'}
-                    className='rounded text-center border border-solid w-[36px] h-[36px]'
+                    className='rounded text-center border border-solid border-gray-200 w-[36px] h-[36px]'
                     value={page}
                     onChange={(e: any) => {
                         if (e.target.value > 0 || !e.target.value) {
@@ -73,7 +72,7 @@ const Pagination = (props: Props) => {
                 />
                 <button onClick={onGo} className='rounded text-[13px] text-center w-[36px] h-[36px] bg-green-500 text-white'>Go</button>
             </div>
-            <div className='flex justify-end items-center mt-3 mb-1 gap-2'>
+            <div className='flex justify-end items-center my-1 gap-2'>
                 <button
                     onClick={onPrev}
                     disabled={currentPage === 1}

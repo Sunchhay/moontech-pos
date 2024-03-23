@@ -20,4 +20,3 @@ export const RouteName = {
     Settings: '/settings',
     Help: '/help',
 }
-

@@ -1,23 +1,37 @@
 import { HTMLInputTypeAttribute, useCallback, useEffect, useRef, useState } from "react";
-import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
+import { IoMdAdd, IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import { IoCheckmarkSharp, IoSearch } from "react-icons/io5";
 
 interface IDropdown {
     data: Array<any>;
-    label: string;
-    name: string;
+    label?: string;
+    name?: string;
     type?: HTMLInputTypeAttribute;
-    value: any;
+    value?: any;
     onChange: (e: any) => void;
+    onAddNew?: () => void;
+    addButtonTitle?: string;
     placeholder?: string;
     width?: string;
+    parent_code?: any;
+    hasParent?: boolean;
 }
 
 export const AppDropDown = (props: IDropdown) => {
     const [isShow, setIsShow] = useState(false);
+    const [isTop, setIsTop] = useState(false);
     const [data, setData] = useState<any>([]);
     const [search, setSearch] = useState('');
     const containerRef = useRef<any>();
+
+    useEffect(() => {
+        const position = containerRef?.current?.getBoundingClientRect();
+        if (position.y > window.innerHeight * 0.65) {
+            setIsTop(true);
+        } else {
+            setIsTop(false);
+        }
+    }, [isShow])
 
     const onMouseDown = useCallback(
         (e: any) => {
@@ -57,15 +71,15 @@ export const AppDropDown = (props: IDropdown) => {
         }
     }
 
-    return <div ref={containerRef} className={`relative ${props.width ? props.width : 'w-full'}  mb-4 text-[13px] `}>
+    return <div id={'container'} ref={containerRef} className={`relative ${props.width ? props.width : 'w-full'} mb-4 text-[13px]`}>
         <div className='text-gray-600 mb-[3px]'>{props.label}</div>
-        <button onClick={() => setIsShow(!isShow)} className={`${getPlaceholder() ? 'text-black' : 'text-gray-400'} ${'w-full px-3 py-[8px] flex justify-between items-center rounded border border-solid'} ${isShow ? 'border-teal-500' : 'border-gray-200'} bg-gray-50`}>
+        <button onClick={() => setIsShow(!isShow)} className={`${getPlaceholder() ? 'text-black' : 'text-gray-400'} ${'w-full px-3 py-[8px] flex justify-between items-center rounded border border-solid'} ${isShow ? 'border-teal-500' : 'border-gray-200'}`}>
             {getPlaceholder() ?? props.placeholder}
             <IoMdArrowDropup size={18} className={`text-gray-400 ${!isShow && 'hidden'}`} />
             <IoMdArrowDropdown size={18} className={`text-gray-400 ${isShow && 'hidden'}`} />
         </button>
-        <div className={`absolute shadow-lg px-2 pt-2 top-[65px] right-0 left-0 bg-white rounded-md transition-all duration-200
-            ${isShow ? 'visible opacity-100 translate-y-0' : `invisible opacity-0 -translate-y-3`} 
+        <div className={`absolute shadow-lg px-2 pt-2 ${isTop ? 'bottom-[44px]' : `${props.label ? 'top-[65px]' : 'top-[43px]'}`} right-0 left-0 bg-white rounded-md transition-all duration-200
+            ${isShow ? `visible opacity-100 translate-y-0` : `invisible opacity-0 ${isTop ? 'translate-y-3' : '-translate-y-3'}`} 
             border border-gray-100 border-solid z-50 pb-2`}>
             <div className='flex items-center gap-2.5 px-2.5 pb-3 pt-2 mb-1.5 border-b border-b-gray-200'>
                 <IoSearch className='text-gray-400' size={18} />
@@ -77,7 +91,16 @@ export const AppDropDown = (props: IDropdown) => {
                     className='w-full text-[13px] text-gray-800'
                 />
             </div>
-            <div className={`overflow-y-auto ${data?.length > 8 && 'pr-2'} max-h-60`}>
+            {
+                props.onAddNew && <button onClick={() => {
+                    props.onAddNew && props.onAddNew();
+                    setIsShow(false);
+                }} className={`w-full flex items-center text-[13px] px-3 py-[8px] text-green-600 gap-2 hover:bg-gray-50 rounded`}>
+                    <IoMdAdd size={18} />
+                    {props.addButtonTitle}
+                </button>
+            }
+            <div className={`overflow-y-auto ${data?.length > 8 && 'pr-2'} max-h-44`}>
                 {
                     data?.length > 0 ? data?.map((item: any, index: number) => (
                         <button key={index} onClick={() => {
@@ -96,17 +119,26 @@ export const AppDropDown = (props: IDropdown) => {
                     )) : <div className="text-[13px] text-center py-3">No data found.</div>
                 }
             </div>
-
         </div>
     </div>
 }
 
-
 export const ColorDropDown = (props: IDropdown) => {
     const [isShow, setIsShow] = useState(false);
+    const [isTop, setIsTop] = useState(false);
     const [data, setData] = useState<any>([]);
     const [search, setSearch] = useState('');
     const containerRef = useRef<any>();
+
+    useEffect(() => {
+        const position = containerRef?.current?.getBoundingClientRect();
+        if (position.y > window.innerHeight * 0.65) {
+            setIsTop(true);
+        } else {
+            setIsTop(false);
+        }
+    }, [isShow])
+
 
     const onMouseDown = useCallback(
         (e: any) => {
@@ -148,13 +180,13 @@ export const ColorDropDown = (props: IDropdown) => {
 
     return <div ref={containerRef} className={`relative ${props.width ? props.width : 'w-full'}  mb-4 text-[13px] `}>
         <div className='text-gray-600 mb-[3px]'>{props.label}</div>
-        <button onClick={() => setIsShow(!isShow)} className={`${getPlaceholder() ? 'text-black' : 'text-gray-400'} ${'w-full px-3 py-[8px] flex justify-between items-center rounded border border-solid'} ${isShow ? 'border-teal-500' : 'border-gray-200'} bg-gray-50`}>
+        <button onClick={() => setIsShow(!isShow)} className={`${getPlaceholder() ? 'text-black' : 'text-gray-400'} ${'w-full px-3 py-[8px] flex justify-between items-center rounded border border-solid'} ${isShow ? 'border-teal-500' : 'border-gray-200'}`}>
             {getPlaceholder() ?? props.placeholder}
             <IoMdArrowDropup size={18} className={`text-gray-400 ${!isShow && 'hidden'}`} />
             <IoMdArrowDropdown size={18} className={`text-gray-400 ${isShow && 'hidden'}`} />
         </button>
-        <div className={`absolute shadow-lg px-2 pt-2 top-[65px] right-0 left-0 bg-white rounded-md transition-all duration-200
-            ${isShow ? 'visible opacity-100 translate-y-0' : `invisible opacity-0 -translate-y-3`} 
+        <div className={`absolute shadow-lg px-2 pt-2 ${isTop ? 'bottom-[44px]' : 'top-[65px]'} right-0 left-0 bg-white rounded-md transition-all duration-200
+            ${isShow ? 'visible opacity-100 translate-y-0' : `invisible opacity-0 ${isTop ? 'translate-y-3' : '-translate-y-3'}`} 
             border border-gray-100 border-solid z-50 pb-2`}>
             <div className='flex items-center gap-2.5 px-2.5 pb-3 pt-2 mb-1.5 border-b border-b-gray-200'>
                 <IoSearch className='text-gray-400' size={18} />

@@ -15,13 +15,15 @@ import axios, { ApiManager } from "../../../utils/lib/axios";
 import { getProduct } from "../../../redux/actions/product.action";
 import { ErrorToast, SuccessToast } from "../../custom/Toast";
 import DiscardDialog from "../dialog/DiscardDialog";
+import { status } from "../../../utils/lib/status";
 
 interface Props {
+    data: any;
     isOpen: boolean;
     handleClose: () => void;
 }
 
-const ProductModal = ({ isOpen, handleClose }: Props) => {
+const ProductModal = ({ isOpen, handleClose, data }: Props) => {
     const dispatch = useAppDispatch();
     const brandState = useAppSelector(state => state.allBrand);
     const categoryState = useAppSelector(state => state.allCategory);
@@ -38,6 +40,7 @@ const ProductModal = ({ isOpen, handleClose }: Props) => {
         dispatch(getAllCategory());
         dispatch(getAllColor());
         dispatch(getAllAttribute());
+        setState(data);
     }, []);
 
     useEffect(() => {
@@ -92,10 +95,10 @@ const ProductModal = ({ isOpen, handleClose }: Props) => {
             handleError('qty', 'is required');
             isValid = false;
         }
-        if (!state?.alert_qty) {
-            handleError('alert_qty', 'is required');
-            isValid = false;
-        }
+        // if (!state?.alert_qty) {
+        //     handleError('alert_qty', 'is required');
+        //     isValid = false;
+        // }
         // if (!state?.brand_id) {
         //     handleError('brand_id', 'is required');
         //     isValid = false;
@@ -123,12 +126,12 @@ const ProductModal = ({ isOpen, handleClose }: Props) => {
 
     const handleSave = () => {
         setOpenSave(false);
-        const formdata = new FormData();
+        const formdata: any = new FormData();
         for (var key in state) {
             (key !== 'imageUrl') && formdata.append(key, state[key]);
         }
-        formdata.append('image', state?.imageUrl ? state?.imageUrl : state?.image);
-        axios.post('product/create', formdata).then((response) => {
+        formdata.set('image', state?.imageUrl ? state?.imageUrl : state?.image);
+        axios.post(state?.id ? 'product/update' : 'product/create', formdata).then((response) => {
             if (response.data.message === true) {
                 dispatch(getProduct({ page: 1 }));
                 handleClose();
@@ -164,8 +167,8 @@ const ProductModal = ({ isOpen, handleClose }: Props) => {
                             </button>
                         </div>
                     </div>
-                    <div className="flex flex-col sm:flex-row sm:gap-3 overflow-y-auto h-full pb-20 sm:pb-4 scrollbar-hide">
-                        <div className="order-2 sm:order-1 sm:w-[65%]">
+                    <div className="flex flex-col sm:flex-row sm:gap-3 overflow-y-auto max-h-[93%] pb-30 sm:pb-4 scrollbar-hide">
+                        <div className="sm:w-[65%]">
                             <div className="bg-white px-4 py-5 md:px-5 mb-3 shadow-sm">
                                 <div className="mb-3">General Information</div>
                                 <FormInput
@@ -176,75 +179,20 @@ const ProductModal = ({ isOpen, handleClose }: Props) => {
                                     error={error?.name}
                                     onChange={handleChange}
                                 />
+                                <div className='text-gray-600 mb-[5px] text-[13px]'>Product Image</div>
+                                <label htmlFor='getFile' className={`${state?.image ? 'border-white' : 'border-gray-200'} w-[152px] h-[152px] border-2 border-dashed flex flex-col items-center justify-center rounded mb-3`}>
+                                    {
+                                        state?.image ? <img src={state?.image} alt='' width={152} height={152} style={{ width: 152, height: 152, objectFit: 'cover', borderRadius: 6 }} />
+                                            : <>
+                                                <FaCamera className='text-gray-300' size={30} />
+                                                <div className='text-sm text-gray-400 mt-2'>Add Image</div>
+                                                <div className='text-[13px] text-gray-400 mt-1'>512 x 512</div>
+                                            </>
+                                    }
+                                </label>
+                                <input id='getFile' type='file' name="profile" value='' onChange={handleSelectImage} accept="image/png, image/jpeg" hidden />
+
                             </div>
-                            <div className="bg-white px-4 py-5 md:px-5 mb-3 shadow-sm">
-                                <div className="mb-3">Pricing</div>
-                                <FormInput
-                                    label='Initial Price'
-                                    placeholder='Enter product name'
-                                    name='initial_price'
-                                    value={state?.initial_price}
-                                    error={error?.initial_price}
-                                    onChange={handleChange}
-                                />
-                                <FormInput
-                                    label='Sale Price'
-                                    placeholder='Enter product name'
-                                    name='sale_price'
-                                    value={state?.sale_price}
-                                    error={error?.sale_price}
-                                    onChange={handleChange}
-                                />
-                                <div className="flex items-center gap-3">
-                                    <FormInput
-                                        label='Discount'
-                                        placeholder='Enter discount'
-                                        name='discount'
-                                        value={state?.discount}
-                                        onChange={handleChange}
-                                    />
-                                    <FormDropdown
-                                        data={[{ id: 'percentage', name: 'Percentage' }, { id: 'amount', name: 'Amount' }]}
-                                        label='Discount Type'
-                                        placeholder='Select'
-                                        name='discount_type'
-                                        value={state?.discount_type}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-                            </div>
-                            <div className="bg-white px-4 py-5 md:px-5 mb-3 shadow-sm">
-                                <div className="mb-3">Inventory</div>
-                                <div className="sm:flex gap-3">
-                                    <FormInput
-                                        label='Quantity In Stock'
-                                        placeholder='Enter number'
-                                        name='qty'
-                                        value={state?.qty}
-                                        error={error?.qty}
-                                        onChange={handleChange}
-                                        type={'number'}
-                                    />
-                                    <FormInput
-                                        label='Alert Quantity'
-                                        placeholder='Enter number'
-                                        name='alert_qty'
-                                        value={state?.alert_qty}
-                                        error={error?.alert_qty}
-                                        onChange={handleChange}
-                                        type={'number'}
-                                    />
-                                    <FormInput
-                                        label='SKU'
-                                        placeholder='Enter SKU'
-                                        name='sku'
-                                        value={state?.sku}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="order-1 sm:order-2 sm:w-[35%]">
                             <div className="bg-white px-4 py-5 md:px-5 mb-3 shadow-sm">
                                 <div className="mb-3">Variation</div>
                                 <AppDropDown
@@ -271,43 +219,104 @@ const ProductModal = ({ isOpen, handleClose }: Props) => {
                                     value={state?.color_id}
                                     onChange={handleChange}
                                 />
+                                <AppDropDown
+                                    data={attributeState.data}
+                                    label='Attribute'
+                                    placeholder='Select'
+                                    name='attribute_id'
+                                    value={state?.attribute_id}
+                                    onChange={handleChange}
+                                />
+                                <AppDropDown
+                                    data={subAttributeState.data}
+                                    label='Select'
+                                    placeholder='Select'
+                                    name='sub_attribute_id'
+                                    value={state?.sub_attribute_id}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                        </div>
+                        <div className="sm:w-[35%]">
+                            <div className="bg-white px-4 py-5 md:px-5 mb-3 shadow-sm">
+                                <div className="mb-3">Pricing</div>
+                                <FormInput
+                                    label='Initial Price'
+                                    placeholder='Enter initial price'
+                                    name='initial_price'
+                                    value={state?.initial_price}
+                                    error={error?.initial_price}
+                                    onChange={handleChange}
+                                />
+                                <FormInput
+                                    label='Sale Price'
+                                    placeholder='Enter sale price'
+                                    name='sale_price'
+                                    value={state?.sale_price}
+                                    error={error?.sale_price}
+                                    onChange={handleChange}
+                                />
                                 <div className="flex items-center gap-3">
-                                    <AppDropDown
-                                        data={attributeState.data}
-                                        label='Attribute'
-                                        placeholder='Select'
-                                        name='attribute_id'
-                                        value={state?.attribute_id}
+                                    <FormInput
+                                        label='Discount'
+                                        placeholder='Enter discount'
+                                        name='discount'
+                                        value={state?.discount}
                                         onChange={handleChange}
                                     />
-                                    <AppDropDown
-                                        data={subAttributeState.data}
-                                        label='Select'
+                                    <FormDropdown
+                                        data={[{ id: 'percentage', name: 'Percentage' }, { id: 'amount', name: 'Amount' }]}
+                                        label='Discount Type'
                                         placeholder='Select'
-                                        name='sub_attribute_id'
-                                        value={state?.sub_attribute_id}
+                                        name='discount_type'
+                                        value={state?.discount_type}
                                         onChange={handleChange}
                                     />
                                 </div>
                             </div>
                             <div className="bg-white px-4 py-5 md:px-5 mb-3 shadow-sm">
-                                <div className="mb-3">Image</div>
-                                <label htmlFor='getFile' className={`${state?.image ? 'border-white' : 'border-gray-200'} w-[152px] h-[152px] border-2 border-dashed flex flex-col items-center justify-center rounded mb-3`}>
-                                    {
-                                        state?.image ? <img src={state?.image} alt='' width={152} height={152} style={{ width: 152, height: 152, objectFit: 'cover', borderRadius: 6 }} />
-                                            : <>
-                                                <FaCamera className='text-gray-300' size={30} />
-                                                <div className='text-sm text-gray-400 mt-2'>Add Image</div>
-                                                <div className='text-[13px] text-gray-400 mt-1'>512 x 512</div>
-                                            </>
-                                    }
-                                </label>
-                                <input id='getFile' type='file' name="profile" value='' onChange={handleSelectImage} accept="image/png, image/jpeg" hidden />
+                                <div className="mb-3">Inventory</div>
+                                <FormInput
+                                    label='Quantity In Stock'
+                                    placeholder='Enter number'
+                                    name='qty'
+                                    value={state?.qty}
+                                    error={error?.qty}
+                                    onChange={handleChange}
+                                    type={'number'}
+                                />
+                                <FormInput
+                                    label='Alert Quantity'
+                                    placeholder='Enter number'
+                                    name='alert_qty'
+                                    value={state?.alert_qty}
+                                    error={error?.alert_qty}
+                                    onChange={handleChange}
+                                    type={'number'}
+                                />
+                                <FormInput
+                                    label='SKU'
+                                    placeholder='Enter SKU'
+                                    name='sku'
+                                    value={state?.sku}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="bg-white px-4 py-5 md:px-5 mb-3 shadow-sm">
+                                <div className="mb-3">Status</div>
+                                <FormDropdown
+                                    data={status}
+                                    label='Status'
+                                    placeholder='Select'
+                                    name='status'
+                                    value={state?.status}
+                                    onChange={handleChange}
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
-            </Modal>
+            </Modal >
             <SaveDialog
                 isOpen={openSave}
                 handleClose={() => setOpenSave(false)}

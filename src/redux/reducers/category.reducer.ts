@@ -26,8 +26,13 @@ const CategoryReducer = createReducer(initialState, builder => {
     });
 });
 
+const allState = {
+  loading: false,
+  data: [],
+  count: 0
+};
 
-const AllCategoryReducer = createReducer(initialState, builder => {
+const AllCategoryReducer = createReducer(allState, builder => {
   builder
     .addCase(getAllCategory, state => {
       state.loading = true;
@@ -35,6 +40,7 @@ const AllCategoryReducer = createReducer(initialState, builder => {
     .addCase(getAllCategorySuccess, (state, action) => {
       state.loading = false;
       state.data = action.payload.data;
+      state.count = action.payload.count;
     })
     .addCase(getAllCategoryError, (state, action) => {
       state.loading = false;

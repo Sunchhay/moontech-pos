@@ -1,6 +1,5 @@
 'use client'
 import React, { createContext, useLayoutEffect, useState } from 'react'
-import Cookies from 'js-cookie';
 import { ApiManager } from '../lib/axios';
 import { useNavigate } from 'react-router-dom';
 import { RouteName } from '../lib/routeName';
@@ -16,14 +15,14 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     useLayoutEffect(() => {
         const getUser = () => {
-            const token = Cookies.get('token');
+            const token = localStorage.getItem('token');
             if (token) {
                 ApiManager.get('profile').then((res: any) => {
                     if (res.status === 200) {
                         setAuth(res?.data);
                         dispatch(getProfileSuccess(res?.data));
                     } else {
-                        Cookies.remove('token');
+                        localStorage.removeItem('token');
                         navigate(RouteName.Login, { replace: true });
                         setAuth({});
                         dispatch(getProfileSuccess({}));

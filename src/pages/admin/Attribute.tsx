@@ -27,7 +27,7 @@ const Attribute = () => {
   }, [currentPage, attribute]);
 
   const handlePost = () => {
-    ApiManager.POST((state?.id ? `attribute/update ` : `attribute/create`) + `?page=${currentPage}&keyword=${search ?? ''}&status=${status?.id ?? ''}&parent_id=${attribute?.id ?? ''}`,
+    ApiManager.POST((state?.id ? `attribute/update ` : `attribute/create`),
       { ...state, parent_id: attribute?.id }).then((response: any) => {
         if (response?.message === true) {
           dispatch(getAttributeSuccess(response));

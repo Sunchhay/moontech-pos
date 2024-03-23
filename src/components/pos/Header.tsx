@@ -26,12 +26,12 @@ const Header = () => {
   const { pathname } = useLocation();
 
   return (
-    <div className='fixed w-full h-[55px] px-5 flex justify-between items-center bg-white shadow-sm z-50'>
+    <div className='fixed w-full h-[65px] px-5 flex justify-between items-center bg-white shadow-sm z-50'>
       <img src={AppImages.Logo} alt='' style={{ height: 16 }} />
       <div className='hidden sm:flex'>
         {
           menu.map((item: any, index: number) => (
-            <NavLink to={item.path} key={index} className={`py-4 px-5 text-sm border-b-4 border-solid
+            <NavLink to={item.path} key={index} className={`py-[21px] px-5 text-sm border-b-4 border-solid
                          ${pathname === item.path ? 'text-green-500 border-b-green-500' : 'text-gray-400 border-b-transparent'}
                           hover:text-green-500`}>
               {item.name}
@@ -42,7 +42,7 @@ const Header = () => {
       <div className='sm:w-[300px] flex justify-between items-center'>
         <div className='flex w-full items-center gap-3 -mr-2 sm:mr-0'>
           <img src={AppImages.Profile} alt='' style={{ height: 34 }} className='rounded-full ring-[1.5px] ring-offset-2 ring-green-500' />
-          <div className='hidden sm:flex'>
+          <div className='hidden sm:block'>
             <div className='text-sm font-semibold'>Reaksmey Sunchhay</div>
             <div className='text-xs leading-4 text-gray-400'>Owner</div>
           </div>
