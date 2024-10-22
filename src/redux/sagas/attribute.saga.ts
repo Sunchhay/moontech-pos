@@ -1,6 +1,6 @@
 import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import { getAllAttribute, getAllAttributeError, getAllAttributeSuccess, getAttribute, getAttributeError, getAttributeSuccess, getSubAttribute, getSubAttributeError, getSubAttributeSuccess } from '../actions/attribute.action';
-import { ApiManager } from '../../utils/lib/axios';
+import { ApiManager } from '../../utils/lib/api';
 
 {/* List Attributes */ }
 const getAttributeAPI = async (payload: any) => {

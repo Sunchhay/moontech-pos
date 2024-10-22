@@ -4,7 +4,7 @@ import Lottie from "lottie-react";
 import { RouteName } from '../../utils/lib/routeName';
 import { useNavigate } from 'react-router-dom';
 import { ErrorToast, SuccessToast } from '../../components/custom/Toast';
-import axios from '../../utils/lib/axios';
+import axios from '../../utils/lib/api';
 import { AppInput, PasswordInput } from '../../components/custom/AppInput';
 import { AppButton } from '../../components/custom/AppButton';
 import { AppImages, AppLotties } from '../../utils/lib/images';

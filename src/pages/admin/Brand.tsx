@@ -6,7 +6,7 @@ import BrandModal, { IBrand } from '../../components/modal/admin/BrandModal';
 import { useAppDispatch, useAppSelector } from '../../utils/hook/useRedux';
 import { getBrand, getBrandSuccess } from '../../redux/actions/brand.action';
 import DeleteDialog from '../../components/modal/dialog/DeleteDialog';
-import axios, { ApiManager } from '../../utils/lib/axios';
+import axios, { ApiManager } from '../../utils/lib/api';
 import { ErrorToast, SuccessToast } from '../../components/custom/Toast';
 import Pagination from '../../components/table/Pagination';
 import BrandTable from '../../components/table/BrandTable';
@@ -20,6 +20,9 @@ const Brand = () => {
   const [status, setStatus] = useState<any>({ id: null, name: 'All' });
   const [state, setState] = useState<IBrand>({ status: 1, name: '', image: '', imageUrl: '' });
   const [currentPage, setCurrentPage] = useState(1);
+
+  console.log(brandState);
+  
 
   useEffect(() => {
     dispatch(getBrand({ page: currentPage }));

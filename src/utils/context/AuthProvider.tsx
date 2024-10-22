@@ -1,6 +1,6 @@
 'use client'
 import React, { createContext, useLayoutEffect, useState } from 'react'
-import { ApiManager } from '../lib/axios';
+import { ApiManager } from '../lib/api';
 import { useNavigate } from 'react-router-dom';
 import { RouteName } from '../lib/routeName';
 import { useAppDispatch } from '../hook/useRedux';

@@ -11,7 +11,7 @@ import { getAllColor } from "../../../redux/actions/color.action";
 import { getAllCategory } from "../../../redux/actions/category.action";
 import { AppDropDown, ColorDropDown } from "../../custom/AppDropDown";
 import SaveDialog from "../dialog/SaveDialog";
-import axios, { ApiManager } from "../../../utils/lib/axios";
+import axios, { ApiManager } from "../../../utils/lib/api";
 import { getProduct } from "../../../redux/actions/product.action";
 import { ErrorToast, SuccessToast } from "../../custom/Toast";
 import DiscardDialog from "../dialog/DiscardDialog";

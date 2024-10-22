@@ -36,7 +36,11 @@ const BrandTable = ({ data, onEdit, onActive, onDelete }: Props) => {
                         <TableRow key={index}>
                             <div className='w-[4%] text-center text-gray-500'>{index + 1}</div>
                             <div className='w-full px-5 flex items-center gap-3'>
-                                <img onClick={() => setShowImage(item?.image)} src={item?.image} alt='' className='cursor-pointer border-[0.5px] border-gray-200' style={{ objectFit: 'cover', width: 36, height: 36, borderRadius: 3 }} />
+                                {
+                                    item?.type === 'image'
+                                        ? <img onClick={() => setShowImage(item?.image)} src={item?.image} alt='' className='cursor-pointer border-[0.5px] border-gray-200' style={{ objectFit: 'cover', width: 36, height: 36, borderRadius: 3 }} />
+                                        : <div style={{ backgroundColor: item?.color }} className='border-[0.5px] border-gray-200 w-[36px] h-[36px] rounded-[3px]' />
+                                }
                                 <div>{item?.name}</div>
                             </div>
                             <div className='flex justify-center items-center'>

@@ -1,6 +1,6 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { getCart, getCartError, getCartSuccess } from '../actions/cart.action';
-import { ApiManager } from '../../utils/lib/axios';
+import { ApiManager } from '../../utils/lib/api';
 
 const getCartAPI = async () => {
   const data = await ApiManager.get(`cart/list`);

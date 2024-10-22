@@ -14,7 +14,7 @@ import ProductModal from '../../components/modal/admin/ProductModal';
 import { useAppDispatch, useAppSelector } from '../../utils/hook/useRedux';
 import ProductTable from '../../components/table/ProductTable';
 import { getProduct } from '../../redux/actions/product.action';
-import { ApiManager } from '../../utils/lib/axios';
+import { ApiManager } from '../../utils/lib/api';
 import { ErrorToast, SuccessToast } from '../../components/custom/Toast';
 import DeleteDialog from '../../components/modal/dialog/DeleteDialog';
 import { ProductFilter } from '../../components/custom/ProductFilter';

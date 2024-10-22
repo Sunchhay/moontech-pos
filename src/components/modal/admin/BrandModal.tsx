@@ -3,6 +3,7 @@ import { IoCloseCircleOutline } from 'react-icons/io5';
 import { HiOutlineSave } from 'react-icons/hi';
 import { FormDropdown, FormInput } from '../../custom/AppInput';
 import { FaCamera } from 'react-icons/fa';
+import { IoMdRadioButtonOff, IoMdRadioButtonOn } from 'react-icons/io';
 
 export interface IBrand {
     id?: any;
@@ -60,7 +61,7 @@ const BrandModal = ({ isOpen, handleClose, state, setState, handleSubmit }: Prop
                     </div>
                 </div>
                 <div className='w-[700px] flex gap-3'>
-                    <div className='pb-40 pr-5 pt-5 flex justify-start border-r border-r-gray-200'>
+                    {/* <div className='pb-40 pr-5 pt-5 flex justify-start border-r border-r-gray-200'>
                         <label htmlFor='getFile' className={`w-[180px] h-[180px] ${state?.image ? 'border-0' : 'border-2'} border-dashed flex flex-col items-center justify-center border-gray-200 rounded overflow-hidden`}>
                             {
                                 state?.image ? <img src={state?.image} alt='' width={250} height={250} style={{ width: 250, height: 250, objectFit: 'cover', borderRadius: 6 }} />
@@ -72,9 +73,29 @@ const BrandModal = ({ isOpen, handleClose, state, setState, handleSubmit }: Prop
                             }
                         </label>
                         <input id='getFile' type='file' name="profile" value='' onChange={handleSelectImage} accept="image/png, image/jpeg" hidden />
-                    </div>
+                    </div> */}
+
                     <div className='w-full pt-4 pb-5 pr-2'>
                         <FormInput label='Brand Name' placeholder='Type here' name='name' value={state?.name} onChange={handleChange} />
+                        <div className='flex items-center gap-6 mb-4'>
+                            <button className='flex items-center gap-2'>
+                                <IoMdRadioButtonOn size={18} className={true ? `text-green-500` : `text-gray-600`} />
+                                <div className={`text-sm ${true ? `text-green-500` : `text-gray-600`}`}>Color</div>
+                            </button>
+                            <button className='flex items-center gap-2'>
+                                <IoMdRadioButtonOff size={18} className={false ? `text-green-500` : `text-gray-600`} />
+                                <div className={`text-sm ${false ? `text-green-500` : `text-gray-600`}`}>Image</div>
+                            </button>
+                        </div>
+                        <div className='flex flex-wrap gap-3 mb-5'>
+                            {
+                                [...Array(14)].map(() => (
+                                    <div className='w-20 h-20 bg-slate-500 rounded-md'>
+
+                                    </div>
+                                ))
+                            }
+                        </div>
                         <FormDropdown
                             label='Status'
                             name='status'

@@ -1,6 +1,6 @@
 import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import { getAllColor, getAllColorError, getAllColorSuccess, getColor, getColorError, getColorSuccess } from '../actions/color.action';
-import { ApiManager } from '../../utils/lib/axios';
+import { ApiManager } from '../../utils/lib/api';
 
 const getColorAPI = async (payload: any) => {
   const data = await ApiManager.get(`color/list?page=${payload.page}&keyword=${payload.keyword ?? ''}&status=${payload.status ?? ''}`);

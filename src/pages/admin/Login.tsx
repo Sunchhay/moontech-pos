@@ -4,7 +4,7 @@ import { ErrorToast, SuccessToast } from '../../components/custom/Toast';
 import { AppInput, PasswordInput } from '../../components/custom/AppInput';
 import { AppButton } from '../../components/custom/AppButton';
 import Lottie from 'lottie-react';
-import { ApiManager } from '../../utils/lib/axios';
+import { ApiManager } from '../../utils/lib/api';
 import useAuth from '../../utils/hook/useAuth';
 import { RouteName } from '../../utils/lib/routeName';
 import { AppImages, AppLotties } from '../../utils/lib/images';
@@ -43,13 +43,13 @@ const Login = () => {
             ErrorToast('Invalid Form!', 'Please enter your password.');
         } else {
             setIsLoading(true);
-            ApiManager.post('login', state).then((res: any) => {
-                if (res.message === true) {
-                    setAuth(res?.data);
-                    dispatch(getProfileSuccess(res?.data));
-                    localStorage.setItem('token', res?.data?.token);
+            ApiManager.post('login', state).then((response: any) => {
+                if (response.status === 200) {
+                    setAuth(response?.data);
+                    dispatch(getProfileSuccess(response?.data));
+                    localStorage.setItem('token', response?.data?.token);
                     navigate(RouteName.Menu);
-                    SuccessToast('Successfully!', `Login as ${res?.data?.email}`);
+                    SuccessToast('Successfully!', `Login as ${response?.data?.email}`);
                 } else {
                     ErrorToast('Wrong Credential!', 'Incorrect email or password.');
                 }

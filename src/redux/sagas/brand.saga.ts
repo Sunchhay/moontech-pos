@@ -1,9 +1,9 @@
 import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import { getAllBrand, getAllBrandError, getAllBrandSuccess, getBrand, getBrandError, getBrandSuccess } from '../actions/brand.action';
-import { ApiManager } from '../../utils/lib/axios';
+import { ApiManager } from '../../utils/lib/api';
 
 const getBrandAPI = async (payload: any) => {
-  const data = await ApiManager.get(`brand/list?page=${payload.page}&keyword=${payload.keyword ?? ''}&status=${payload.status ?? ''}`);
+  const data = await ApiManager.get(`brand?page=${payload.page}&limit=10`);
   return data;
 }
 
@@ -23,7 +23,6 @@ function* fetchBrand(action: any): any {
 export function* watchFetchBrand() {
   yield takeLatest(getBrand.type, fetchBrand);
 }
-
 
 const getAllBrandAPI = async () => {
   const data = await ApiManager.get(`brand/list-all`);

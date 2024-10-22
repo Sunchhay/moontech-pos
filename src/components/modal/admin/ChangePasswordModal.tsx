@@ -4,7 +4,7 @@ import { HiOutlineSave } from 'react-icons/hi';
 import { FormPasswordInput } from '../../custom/AppInput';
 import { useState } from 'react';
 import { ErrorToast, SuccessToast } from '../../custom/Toast';
-import { ApiManager } from '../../../utils/lib/axios';
+import { ApiManager } from '../../../utils/lib/api';
 
 export interface IPassword {
     current_password: string;

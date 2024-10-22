@@ -1,6 +1,6 @@
 import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import { getAllProduct, getAllProductError, getAllProductSuccess, getProduct, getProductError, getProductSuccess } from '../actions/product.action';
-import { ApiManager } from '../../utils/lib/axios';
+import { ApiManager } from '../../utils/lib/api';
 
 const getProductAPI = async (payload: any) => {
   const data = await ApiManager.get(`product/list?page=${payload.page}&keyword=${payload.keyword ?? ''}&status=${payload.status ?? ''}`);

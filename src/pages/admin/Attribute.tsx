@@ -4,7 +4,7 @@ import { SearchInput } from '../../components/custom/AppInput';
 import { AddNewButton, AppDropDownButton } from '../../components/custom/AppButton';
 import { useAppDispatch, useAppSelector } from '../../utils/hook/useRedux';
 import DeleteDialog from '../../components/modal/dialog/DeleteDialog';
-import { ApiManager } from '../../utils/lib/axios';
+import { ApiManager } from '../../utils/lib/api';
 import { ErrorToast, SuccessToast } from '../../components/custom/Toast';
 import Pagination from '../../components/table/Pagination';
 import AttributeTable from '../../components/table/AttributeTable';
