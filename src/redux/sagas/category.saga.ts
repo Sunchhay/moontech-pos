@@ -3,7 +3,8 @@ import { getAllCategory, getAllCategoryError, getAllCategorySuccess, getCategory
 import { ApiManager } from '../../utils/lib/api';
 
 const getCategoryAPI = async (payload: any) => {
-  const data = await ApiManager.get(`category/list?page=${payload.page}&keyword=${payload.keyword ?? ''}&status=${payload.status ?? ''}`);
+  const data = await ApiManager.get(`category`);
+  // const data = await ApiManager.get(`category/list?page=${payload.page}&keyword=${payload.keyword ?? ''}&status=${payload.status ?? ''}`);
   return data;
 }
 
@@ -25,7 +26,7 @@ export function* watchFetchCategory() {
 }
 
 const getAllCategoryAPI = async () => {
-  const data = await ApiManager.get(`category/list-all`);
+  const data = await ApiManager.get(`category`);
   return data;
 }
 

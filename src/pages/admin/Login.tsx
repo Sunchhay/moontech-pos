@@ -45,6 +45,8 @@ const Login = () => {
             setIsLoading(true);
             ApiManager.post('login', state).then((response: any) => {
                 if (response.status === 200) {
+                    console.log(response?.data?.token);
+                    
                     setAuth(response?.data);
                     dispatch(getProfileSuccess(response?.data));
                     localStorage.setItem('token', response?.data?.token);

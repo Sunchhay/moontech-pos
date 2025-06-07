@@ -3,7 +3,8 @@ import { getAllProduct, getAllProductError, getAllProductSuccess, getProduct, ge
 import { ApiManager } from '../../utils/lib/api';
 
 const getProductAPI = async (payload: any) => {
-  const data = await ApiManager.get(`product/list?page=${payload.page}&keyword=${payload.keyword ?? ''}&status=${payload.status ?? ''}`);
+  const data = await ApiManager.get(`product`);
+  // const data = await ApiManager.get(`product/list?page=${payload.page}&keyword=${payload.keyword ?? ''}&status=${payload.status ?? ''}`);
   return data;
 }
 
@@ -25,7 +26,8 @@ export function* watchFetchProduct() {
 }
 
 const getAllProductAPI = async (payload: any) => {
-  const data = await ApiManager.get(`product/list-all?category_id=${payload.category_id ?? null}`);
+  const data = await ApiManager.get(`product`);
+  // const data = await ApiManager.get(`product/list-all?category_id=${payload.category_id ?? null}`);
   return data;
 }
 

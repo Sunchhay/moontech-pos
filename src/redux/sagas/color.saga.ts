@@ -3,7 +3,8 @@ import { getAllColor, getAllColorError, getAllColorSuccess, getColor, getColorEr
 import { ApiManager } from '../../utils/lib/api';
 
 const getColorAPI = async (payload: any) => {
-  const data = await ApiManager.get(`color/list?page=${payload.page}&keyword=${payload.keyword ?? ''}&status=${payload.status ?? ''}`);
+  const data = await ApiManager.get(`color`);
+  // const data = await ApiManager.get(`color/list?page=${payload.page}&keyword=${payload.keyword ?? ''}&status=${payload.status ?? ''}`);
   return data;
 }
 
@@ -25,7 +26,8 @@ export function* watchFetchColor() {
 }
 
 const getAllColorAPI = async () => {
-  const data = await ApiManager.get(`color/list-all`);
+  const data = await ApiManager.get(`color`);
+  // const data = await ApiManager.get(`color/list-all`);
   return data;
 }
 

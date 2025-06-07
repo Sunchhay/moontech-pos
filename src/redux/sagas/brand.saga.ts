@@ -3,7 +3,7 @@ import { getAllBrand, getAllBrandError, getAllBrandSuccess, getBrand, getBrandEr
 import { ApiManager } from '../../utils/lib/api';
 
 const getBrandAPI = async (payload: any) => {
-  const data = await ApiManager.get(`brand?page=${payload.page}&limit=10`);
+  const data = await ApiManager.get(`brand`);
   return data;
 }
 

@@ -3,7 +3,8 @@ import { getCustomer, getCustomerError, getCustomerSuccess } from '../actions/cu
 import { ApiManager } from '../../utils/lib/api';
 
 const getCustomerAPI = async (payload: any) => {
-  const data = await ApiManager.get(`customer/list?page=${payload.page}&keyword=${payload.keyword ?? ''}&status=${payload.status ?? ''}`);
+  const data = await ApiManager.get(`customer`);
+  // const data = await ApiManager.get(`customer/list?page=${payload.page}&keyword=${payload.keyword ?? ''}&status=${payload.status ?? ''}`);
   return data;
 }
 

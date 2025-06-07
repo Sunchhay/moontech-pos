@@ -4,7 +4,8 @@ import { ApiManager } from '../../utils/lib/api';
 
 {/* List Attributes */ }
 const getAttributeAPI = async (payload: any) => {
-  const data = await ApiManager.get(`attribute/list?page=${payload.page}&keyword=${payload.keyword ?? ''}&status=${payload.status ?? ''}&parent_id=${payload.parent_id ?? ''}`);
+  const data = await ApiManager.get(`attribute`);
+  // const data = await ApiManager.get(`attribute/list?page=${payload.page}&keyword=${payload.keyword ?? ''}&status=${payload.status ?? ''}&parent_id=${payload.parent_id ?? ''}`);
   return data;
 }
 
@@ -27,7 +28,8 @@ export function* watchFetchAttribute() {
 
 {/* All Attributes */ }
 const getAllAttributeAPI = async () => {
-  const data = await ApiManager.get(`attribute/list-all`);
+  const data = await ApiManager.get(`attribute`);
+  // const data = await ApiManager.get(`attribute/list-all`);
   return data;
 }
 
